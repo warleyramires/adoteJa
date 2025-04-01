@@ -8,11 +8,11 @@ import java.util.List;
 @Entity
 @Table(name = "tb_users")
 @Inheritance(strategy = InheritanceType.JOINED)
-@Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Usuario {
 
     @Id
