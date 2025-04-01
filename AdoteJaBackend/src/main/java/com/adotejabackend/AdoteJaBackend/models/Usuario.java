@@ -2,7 +2,6 @@ package com.adotejabackend.AdoteJaBackend.models;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 

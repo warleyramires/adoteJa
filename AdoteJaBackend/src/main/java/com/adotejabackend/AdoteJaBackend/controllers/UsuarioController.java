@@ -1,6 +1,5 @@
 package com.adotejabackend.AdoteJaBackend.controllers;
 
-import com.adotejabackend.AdoteJaBackend.dtos.CreateAdotanteDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.CreateUsuarioDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.LoginUsuarioDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.RecoveryJwtTokenDTO;
