@@ -12,11 +12,15 @@ public class Endereco {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String logadouro;
+    private String logradouro;
     private String numero;
     private String bairro;
     private String cidade;
     private String estado;
     private String cep;
+
+    @OneToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
 }

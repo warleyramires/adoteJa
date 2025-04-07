@@ -2,7 +2,7 @@ package com.adotejabackend.AdoteJaBackend.dtos;
 
 public record EnderecoDTO(
 
-         String logadouro,
+         String logradouro,
          String numero,
          String bairro,
          String cidade,
