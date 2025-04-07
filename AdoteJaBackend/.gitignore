@@ -33,6 +33,5 @@ build/
 .vscode/
 
 # Arquivo de configuração local
-src/main/resources/application-dev.properties
-
+src/main/resources/application-*.properties
 
