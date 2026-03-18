@@ -60,7 +60,7 @@ public class PetService {
         String novaUrl = uploadIfPresent(imagem);
         if (novaUrl != null) pet.setImagemUrl(novaUrl);
 
-        if (dto.saude() != null) {
+        if (dto.saude() != null && pet.getSaude() != null) {
             Saude s = pet.getSaude();
             if (dto.saude().vacinado() != null) s.setVacinado(dto.saude().vacinado());
             if (dto.saude().castrado() != null) s.setCastrado(dto.saude().castrado());
@@ -68,7 +68,7 @@ public class PetService {
             if (dto.saude().historicoSaude() != null) s.setHistoricoSaude(dto.saude().historicoSaude());
         }
 
-        if (dto.caracteristica() != null) {
+        if (dto.caracteristica() != null && pet.getCaracteristica() != null) {
             Caracteristica c = pet.getCaracteristica();
             if (dto.caracteristica().raca() != null) c.setRaca(dto.caracteristica().raca());
             if (dto.caracteristica().cor() != null) c.setCor(dto.caracteristica().cor());
@@ -116,13 +116,13 @@ public class PetService {
     }
 
     private RecoveryPetDTO toRecoveryDTO(Pet pet) {
-        SaudeDTO saudeDTO = new SaudeDTO(
+        SaudeDTO saudeDTO = pet.getSaude() == null ? null : new SaudeDTO(
                 pet.getSaude().getVacinado(),
                 pet.getSaude().getCastrado(),
                 pet.getSaude().getVermifugado(),
                 pet.getSaude().getHistoricoSaude()
         );
-        CaracteristicaDTO caracDTO = new CaracteristicaDTO(
+        CaracteristicaDTO caracDTO = pet.getCaracteristica() == null ? null : new CaracteristicaDTO(
                 pet.getCaracteristica().getRaca(),
                 pet.getCaracteristica().getCor(),
                 pet.getCaracteristica().getEspecie(),
