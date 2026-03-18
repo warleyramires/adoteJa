@@ -2,6 +2,7 @@ package com.adotejabackend.AdoteJaBackend.controllers;
 
 import com.adotejabackend.AdoteJaBackend.dtos.CreateFuncionarioDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.RecoveryFuncionarioDTO;
+import com.adotejabackend.AdoteJaBackend.dtos.UpdateFuncionarioDTO;
 import com.adotejabackend.AdoteJaBackend.services.FuncionarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,13 @@ public class FuncionarioController {
     @GetMapping("/{id}")
     public ResponseEntity<RecoveryFuncionarioDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(funcionarioService.findById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<RecoveryFuncionarioDTO> update(
+            @PathVariable Long id,
+            @RequestBody UpdateFuncionarioDTO dto) {
+        return ResponseEntity.ok(funcionarioService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")

@@ -4,6 +4,8 @@ import com.adotejabackend.AdoteJaBackend.config.SecurityConfiguration;
 import com.adotejabackend.AdoteJaBackend.dtos.CreateFuncionarioDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.EnderecoDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.RecoveryFuncionarioDTO;
+import com.adotejabackend.AdoteJaBackend.dtos.UpdateFuncionarioDTO;
+import com.adotejabackend.AdoteJaBackend.dtos.UpdateEnderecoDTO;
 import com.adotejabackend.AdoteJaBackend.models.Endereco;
 import com.adotejabackend.AdoteJaBackend.models.Funcionario;
 import com.adotejabackend.AdoteJaBackend.repositories.FuncionarioRepository;
@@ -68,6 +70,29 @@ public class FuncionarioService {
             throw new EntityNotFoundException("Funcionário não encontrado: " + id);
         }
         funcionarioRepository.deleteById(id);
+    }
+
+    public RecoveryFuncionarioDTO update(Long id, UpdateFuncionarioDTO dto) {
+        Funcionario funcionario = funcionarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado: " + id));
+
+        if (dto.nome() != null) funcionario.setNome(dto.nome());
+        if (dto.telefone1() != null) funcionario.setTelefone1(dto.telefone1());
+        if (dto.telefone2() != null) funcionario.setTelefone2(dto.telefone2());
+        if (dto.matricula() != null) funcionario.setMatricula(dto.matricula());
+        if (dto.cargo() != null) funcionario.setCargo(dto.cargo());
+
+        if (dto.endereco() != null && funcionario.getEndereco() != null) {
+            Endereco e = funcionario.getEndereco();
+            if (dto.endereco().logradouro() != null) e.setLogradouro(dto.endereco().logradouro());
+            if (dto.endereco().numero() != null) e.setNumero(dto.endereco().numero());
+            if (dto.endereco().bairro() != null) e.setBairro(dto.endereco().bairro());
+            if (dto.endereco().cidade() != null) e.setCidade(dto.endereco().cidade());
+            if (dto.endereco().estado() != null) e.setEstado(dto.endereco().estado());
+            if (dto.endereco().cep() != null) e.setCep(dto.endereco().cep());
+        }
+
+        return toRecoveryDTO(funcionarioRepository.save(funcionario));
     }
 
     private Endereco toEnderecoEntity(EnderecoDTO dto) {
