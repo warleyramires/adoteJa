@@ -6,9 +6,9 @@ import com.adotejabackend.AdoteJaBackend.dtos.EnderecoDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.LoginUsuarioDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.RecoveryJwtTokenDTO;
 import com.adotejabackend.AdoteJaBackend.models.Endereco;
-import com.adotejabackend.AdoteJaBackend.models.Role;
 import com.adotejabackend.AdoteJaBackend.models.Usuario;
 import com.adotejabackend.AdoteJaBackend.models.UsuarioDetailsImpl;
+import com.adotejabackend.AdoteJaBackend.repositories.RoleRepository;
 import com.adotejabackend.AdoteJaBackend.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,6 +30,9 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     private SecurityConfiguration securityConfiguration;
@@ -58,7 +61,8 @@ public class UsuarioService {
                 .nome(createUsuarioDTO.nome())
                 .email(createUsuarioDTO.email())
                 .password(securityConfiguration.passwordEncoder().encode(createUsuarioDTO.password()))
-                .roles(List.of(Role.builder().name(createUsuarioDTO.role()).build()))
+                .roles(List.of(roleRepository.findByName(createUsuarioDTO.role())
+                        .orElseThrow(() -> new RuntimeException("Role não encontrada: " + createUsuarioDTO.role()))))
                 .telefone1(createUsuarioDTO.telefon1())
                 .telefone2(createUsuarioDTO.telefone2())
                 .endereco(endereco)
