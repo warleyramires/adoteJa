@@ -24,8 +24,9 @@ export function PetFormModal({ pet, onClose }: PetFormModalProps) {
   const [porte, setPorte]         = useState<Porte>(pet?.caracteristica?.porte ?? 'MEDIO')
   const [sexo, setSexo]           = useState<Sexo>(pet?.caracteristica?.sexo ?? 'MACHO')
   const [raca, setRaca]           = useState(pet?.caracteristica?.raca ?? '')
-  const [vacinado, setVacinado]   = useState(pet?.saude?.vacinado ?? false)
-  const [castrado, setCastrado]   = useState(pet?.saude?.castrado ?? false)
+  const [vacinado, setVacinado]     = useState(pet?.saude?.vacinado ?? false)
+  const [castrado, setCastrado]     = useState(pet?.saude?.castrado ?? false)
+  const [vermifugado, setVermifugado] = useState(pet?.saude?.vermifugado ?? false)
   const [imagem, setImagem]       = useState<File | undefined>()
 
   const isPending = createMutation.isPending || updateMutation.isPending
@@ -37,7 +38,7 @@ export function PetFormModal({ pet, onClose }: PetFormModalProps) {
       descricao: descricao || undefined,
       disponivel,
       caracteristica: { especie, porte, sexo, raca: raca || undefined },
-      saude: { vacinado, castrado },
+      saude: { vacinado, castrado, vermifugado },
     }
     try {
       if (isEditing && pet) {
@@ -106,6 +107,10 @@ export function PetFormModal({ pet, onClose }: PetFormModalProps) {
             <label className="flex items-center gap-2 font-body text-sm text-carbon-800 cursor-pointer">
               <input type="checkbox" checked={castrado} onChange={(e) => setCastrado(e.target.checked)} />
               Castrado
+            </label>
+            <label className="flex items-center gap-2 font-body text-sm text-carbon-800 cursor-pointer">
+              <input type="checkbox" checked={vermifugado} onChange={(e) => setVermifugado(e.target.checked)} />
+              Vermifugado
             </label>
             <label className="flex items-center gap-2 font-body text-sm text-carbon-800 cursor-pointer">
               <input type="checkbox" checked={disponivel} onChange={(e) => setDisponivel(e.target.checked)} />
