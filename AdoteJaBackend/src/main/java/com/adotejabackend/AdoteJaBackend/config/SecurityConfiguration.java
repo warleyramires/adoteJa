@@ -26,6 +26,7 @@ public class SecurityConfiguration {
             "/users/login",
             "/users",
             "/adotantes",
+            "/error",
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/swagger-ui.html"
@@ -39,6 +40,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         // Rotas públicas
                         .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
+                        // Adotantes: POST é público (cadastro)
+                        .requestMatchers(HttpMethod.POST, "/adotantes").permitAll()
                         // Pets: GET é público
                         .requestMatchers(HttpMethod.GET, "/pets", "/pets/**").permitAll()
                         // Pets: POST e PUT exigem MEMBER ou ADMINISTRATOR
