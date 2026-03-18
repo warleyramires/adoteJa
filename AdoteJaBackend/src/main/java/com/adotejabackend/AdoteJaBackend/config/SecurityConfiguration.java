@@ -4,6 +4,7 @@ import com.adotejabackend.AdoteJaBackend.components.UserAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,34 +22,50 @@ public class SecurityConfiguration {
     @Autowired
     private UserAuthenticationFilter userAuthenticationFilter;
 
-    public static final String [] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
+    public static final String[] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
             "/users/login",
-            "/users"
-    };
-
-    public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
-            "/users/test"
-    };
-
-    public static final String [] ENDPOINTS_CUSTOMER = {
-            "/users/test/customer"
-    };
-    public static final String [] ENDPOINTS_ADMIN = {
-            "/users/test/administrator"
+            "/users",
+            "/adotantes",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html"
     };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.csrf().disable() // Desativa a proteção contra CSRF
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Configura a política de criação de sessão como stateless
-                .and().authorizeHttpRequests() // Habilita a autorização para as requisições HTTP
-                .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
-                .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
-                .requestMatchers(ENDPOINTS_ADMIN).hasRole("ADMINISTRATOR") // Repare que não é necessário colocar "ROLE" antes do nome, como fizemos na definição das roles
-                .requestMatchers(ENDPOINTS_CUSTOMER).hasRole("CUSTOMER")
-                .anyRequest().denyAll()
-                // Adiciona o filtro de autenticação de usuário que criamos, antes do filtro de segurança padrão do Spring Security
-                .and().addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+        return httpSecurity
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        // Rotas públicas
+                        .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
+                        // Pets: GET é público
+                        .requestMatchers(HttpMethod.GET, "/pets", "/pets/**").permitAll()
+                        // Pets: POST e PUT exigem MEMBER ou ADMINISTRATOR
+                        .requestMatchers(HttpMethod.POST, "/pets").hasAnyRole("MEMBER", "ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.PUT, "/pets/**").hasAnyRole("MEMBER", "ADMINISTRATOR")
+                        // Pets: DELETE exige ADMINISTRATOR
+                        .requestMatchers(HttpMethod.DELETE, "/pets/**").hasRole("ADMINISTRATOR")
+                        // Funcionários: apenas ADMINISTRATOR
+                        .requestMatchers(HttpMethod.POST, "/funcionarios").hasRole("ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.GET, "/funcionarios", "/funcionarios/**").hasRole("ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.PUT, "/funcionarios/**").hasRole("ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.DELETE, "/funcionarios/**").hasRole("ADMINISTRATOR")
+                        // Adotantes: GET e PUT exigem autenticação
+                        .requestMatchers(HttpMethod.GET, "/adotantes/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/adotantes/**").authenticated()
+                        // Solicitações
+                        .requestMatchers(HttpMethod.POST, "/solicitacoes").hasRole("CUSTOMER")
+                        .requestMatchers(HttpMethod.GET, "/solicitacoes/minhas").hasRole("CUSTOMER")
+                        .requestMatchers(HttpMethod.GET, "/solicitacoes").hasAnyRole("MEMBER", "ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.PUT, "/solicitacoes/**").hasAnyRole("MEMBER", "ADMINISTRATOR")
+                        // Testes
+                        .requestMatchers("/users/test").authenticated()
+                        .requestMatchers("/users/test/customer").hasRole("CUSTOMER")
+                        .requestMatchers("/users/test/administrator").hasRole("ADMINISTRATOR")
+                        .anyRequest().denyAll()
+                )
+                .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

@@ -1,6 +1,5 @@
 package com.adotejabackend.AdoteJaBackend.components;
 
-import com.adotejabackend.AdoteJaBackend.config.SecurityConfiguration;
 import com.adotejabackend.AdoteJaBackend.models.Usuario;
 import com.adotejabackend.AdoteJaBackend.models.UsuarioDetailsImpl;
 import com.adotejabackend.AdoteJaBackend.repositories.UsuarioRepository;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 @Component
 public class UserAuthenticationFilter extends OncePerRequestFilter {
@@ -32,24 +30,17 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        if (checkIfEndpointIsNotPublic(request)) {
-            String token = recoveryToken(request);
-            if (token != null) {
-                String subject = jwtTokenService.getSubjectFromToken(token);
-                Usuario usuario = usuarioRepository.findByEmail(subject)
-                        .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + subject));
-                UsuarioDetailsImpl usuarioDetails = new UsuarioDetailsImpl(usuario);
+        String token = recoveryToken(request);
+        if (token != null) {
+            String subject = jwtTokenService.getSubjectFromToken(token);
+            Usuario usuario = usuarioRepository.findByEmail(subject)
+                    .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + subject));
+            UsuarioDetailsImpl usuarioDetails = new UsuarioDetailsImpl(usuario);
 
+            Authentication authentication =
+                    new UsernamePasswordAuthenticationToken(usuarioDetails.getUsername(), null, usuarioDetails.getAuthorities());
 
-                Authentication authentication =
-                        new UsernamePasswordAuthenticationToken(usuarioDetails.getUsername(), null, usuarioDetails.getAuthorities());
-
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            } else {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return;
-            }
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
     }
@@ -60,11 +51,6 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
             return authorizationHeader.replace("Bearer ", "");
         }
         return null;
-    }
-
-    private boolean checkIfEndpointIsNotPublic(HttpServletRequest request) {
-        String requestURI = request.getRequestURI();
-        return !Arrays.asList(SecurityConfiguration.ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).contains(requestURI);
     }
 
 }
