@@ -5,6 +5,15 @@ import { Input } from '../../components/ui/Input'
 import { useFuncionarios, useCreateFuncionario } from '../../features/funcionario/hooks/useFuncionario'
 import { useToast } from '../../contexts/ToastContext'
 import { getApiError } from '../../lib/api'
+import type { RoleName } from '../../types'
+
+const emptyForm = {
+  nome: '', email: '', password: '',
+  telefone1: '', telefone2: '',
+  matricula: '', cargo: '',
+  role: 'ROLE_MEMBER' as RoleName,
+  logradouro: '', numero: '', bairro: '', cidade: '', estado: '', cep: '',
+}
 
 export function AdminFuncionariosPage() {
   const { data: funcionarios, isLoading, isError } = useFuncionarios()
@@ -12,23 +21,41 @@ export function AdminFuncionariosPage() {
   const { showToast } = useToast()
 
   const [showForm, setShowForm] = useState(false)
-  const [nome, setNome]         = useState('')
-  const [email, setEmail]       = useState('')
-  const [password, setPassword] = useState('')
-  const [cargo, setCargo]       = useState('')
+  const [form, setForm] = useState(emptyForm)
+
+  function set(field: keyof typeof emptyForm) {
+    return (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
+      setForm((prev) => ({ ...prev, [field]: e.target.value }))
+  }
 
   function handleCancel() {
     setShowForm(false)
-    setNome(''); setEmail(''); setPassword(''); setCargo('')
+    setForm(emptyForm)
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     try {
-      await createMutation.mutateAsync({ nome, email, password, cargo: cargo || undefined })
+      await createMutation.mutateAsync({
+        nome: form.nome,
+        email: form.email,
+        password: form.password,
+        telefone1: form.telefone1,
+        telefone2: form.telefone2 || undefined,
+        matricula: form.matricula,
+        cargo: form.cargo,
+        role: form.role,
+        enderecoDTO: {
+          logradouro: form.logradouro,
+          numero: form.numero || undefined,
+          bairro: form.bairro || undefined,
+          cidade: form.cidade,
+          estado: form.estado,
+          cep: form.cep,
+        },
+      })
       showToast('Funcionário cadastrado!', 'success')
-      setShowForm(false)
-      setNome(''); setEmail(''); setPassword(''); setCargo('')
+      handleCancel()
     } catch (err) {
       showToast(getApiError(err).message, 'error')
     }
@@ -47,12 +74,46 @@ export function AdminFuncionariosPage() {
       </div>
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="card p-6 mb-8 max-w-md flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="card p-6 mb-8 max-w-lg flex flex-col gap-4">
           <h2 className="font-display text-2xl font-light text-carbon-800">Novo funcionário</h2>
-          <Input label="Nome" value={nome} onChange={(e) => setNome(e.target.value)} required />
-          <Input label="E-mail" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          <Input label="Senha" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} />
-          <Input label="Cargo (opcional)" value={cargo} onChange={(e) => setCargo(e.target.value)} />
+
+          <Input label="Nome" value={form.nome} onChange={set('nome')} required />
+          <Input label="E-mail" type="email" value={form.email} onChange={set('email')} required />
+          <Input label="Senha" type="password" value={form.password} onChange={set('password')} required minLength={8} />
+
+          <div className="grid grid-cols-2 gap-3">
+            <Input label="Telefone" value={form.telefone1} onChange={set('telefone1')} required placeholder="(11) 99999-9999" />
+            <Input label="Telefone 2 (opcional)" value={form.telefone2} onChange={set('telefone2')} placeholder="(11) 99999-9999" />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <Input label="Matrícula" value={form.matricula} onChange={set('matricula')} required />
+            <Input label="Cargo" value={form.cargo} onChange={set('cargo')} required />
+          </div>
+
+          <label className="flex flex-col gap-1">
+            <span className="font-body text-sm text-carbon-800/70">Perfil de acesso</span>
+            <select value={form.role} onChange={set('role')} className="input-base">
+              <option value="ROLE_MEMBER">Funcionário</option>
+              <option value="ROLE_ADMINISTRATOR">Administrador</option>
+            </select>
+          </label>
+
+          <p className="font-body text-sm font-medium text-carbon-800/70 -mb-1">Endereço</p>
+
+          <Input label="Logradouro" value={form.logradouro} onChange={set('logradouro')} required />
+
+          <div className="grid grid-cols-2 gap-3">
+            <Input label="Número (opcional)" value={form.numero} onChange={set('numero')} />
+            <Input label="Bairro (opcional)" value={form.bairro} onChange={set('bairro')} />
+          </div>
+
+          <div className="grid grid-cols-3 gap-3">
+            <Input label="Cidade" value={form.cidade} onChange={set('cidade')} required className="col-span-1" />
+            <Input label="Estado" value={form.estado} onChange={set('estado')} required placeholder="SP" maxLength={2} />
+            <Input label="CEP" value={form.cep} onChange={set('cep')} required placeholder="00000-000" />
+          </div>
+
           <Button type="submit" loading={createMutation.isPending}>Cadastrar</Button>
         </form>
       )}
@@ -75,7 +136,7 @@ export function AdminFuncionariosPage() {
             <div key={f.id} className="card p-4 flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-terracota-100 flex items-center justify-center">
                 <span className="font-display text-lg font-medium text-terracota-500">
-                  {f.nome.charAt(0).toUpperCase()}
+                  {f.nome.charAt(0).toUpperCase() || '?'}
                 </span>
               </div>
               <div>

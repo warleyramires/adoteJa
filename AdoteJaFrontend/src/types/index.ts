@@ -146,8 +146,19 @@ export interface CreateFuncionarioRequest {
   nome: string
   email: string
   password: string
-  cargo?: string
-  telefone1?: string
+  telefone1: string
+  telefone2?: string
+  matricula: string
+  cargo: string
+  role: RoleName
+  enderecoDTO: {
+    logradouro: string
+    numero?: string
+    bairro?: string
+    cidade: string
+    estado: string
+    cep: string
+  }
 }
 
 // ── API Error ─────────────────────────────────────────────────────────────────
