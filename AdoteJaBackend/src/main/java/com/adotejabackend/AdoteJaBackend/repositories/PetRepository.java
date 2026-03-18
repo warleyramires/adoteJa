@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface PetRepository extends JpaRepository<Pet, Long> {
 
-    @Query("SELECT p FROM Pet p JOIN p.caracteristica c WHERE " +
+    @Query("SELECT p FROM Pet p LEFT JOIN p.caracteristica c WHERE " +
            "(:especie IS NULL OR c.especie = :especie) AND " +
            "(:porte IS NULL OR c.porte = :porte) AND " +
            "(:sexo IS NULL OR c.sexo = :sexo) AND " +
