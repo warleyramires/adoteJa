@@ -51,6 +51,9 @@ export function Header() {
               <span className="font-body text-sm text-carbon-800/70 hidden sm:block">
                 Olá, <strong className="text-carbon-800 font-medium">{user.nome}</strong>
               </span>
+              <Link to="/minhas-solicitacoes">
+                <Button variant="ghost" size="sm">Minhas adoções</Button>
+              </Link>
               <Button variant="ghost" size="sm" onClick={handleLogout}>Sair</Button>
             </>
           ) : (
