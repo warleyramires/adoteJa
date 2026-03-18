@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Adotante extends Usuario {
 
+    @Column(nullable = false, unique = true)
     private String cpf;
 
     @Column(name = "data_nascimento")
