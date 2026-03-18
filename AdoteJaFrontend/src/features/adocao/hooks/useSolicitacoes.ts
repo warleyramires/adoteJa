@@ -12,7 +12,7 @@ export function useMinhasSolicitacoes() {
 export function useCriarSolicitacao() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (petId: number) => criarSolicitacao(petId),
+    mutationFn: criarSolicitacao,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['solicitacoes'] })
     },

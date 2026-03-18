@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { PageLayout } from '../../components/layout/PageLayout'
 import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
@@ -13,12 +14,20 @@ const statusVariant: Record<StatusSolicitacao, 'floresta' | 'terracota' | 'neutr
   RECUSADA: 'terracota',
 }
 
+const statusLabel: Record<StatusSolicitacao, string> = {
+  PENDENTE: 'Pendente',
+  APROVADA: 'Aprovada',
+  RECUSADA: 'Recusada',
+}
+
 export function AdminSolicitacoesPage() {
   const { data: solicitacoes, isLoading, isError } = useTodasSolicitacoes()
   const updateMutation = useUpdateSolicitacao()
   const { showToast } = useToast()
+  const [pendingId, setPendingId] = useState<number | null>(null)
 
   async function changeStatus(id: number, status: StatusSolicitacao) {
+    setPendingId(id)
     try {
       await updateMutation.mutateAsync({ id, data: { status } })
       showToast(
@@ -27,6 +36,8 @@ export function AdminSolicitacoesPage() {
       )
     } catch (err) {
       showToast(getApiError(err).message, 'error')
+    } finally {
+      setPendingId(null)
     }
   }
 
@@ -48,6 +59,10 @@ export function AdminSolicitacoesPage() {
           <p className="font-display text-3xl font-light text-carbon-800/30">
             Erro ao carregar solicitações
           </p>
+        </div>
+      ) : solicitacoes?.length === 0 ? (
+        <div className="text-center py-24">
+          <p className="font-display text-3xl font-light text-carbon-800/30">Nenhuma solicitação encontrada</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -78,13 +93,14 @@ export function AdminSolicitacoesPage() {
 
               {/* Status + Actions */}
               <div className="flex items-center gap-2">
-                <Badge variant={statusVariant[s.status]}>{s.status}</Badge>
+                <Badge variant={statusVariant[s.status]}>{statusLabel[s.status]}</Badge>
                 {s.status === 'PENDENTE' && (
                   <>
                     <Button
                       size="sm"
                       onClick={() => changeStatus(s.id, 'APROVADA')}
-                      loading={updateMutation.isPending}
+                      loading={updateMutation.isPending && pendingId === s.id}
+                      aria-label={`Aprovar solicitação de ${s.adotante.nome} para ${s.pet.nome}`}
                     >
                       Aprovar
                     </Button>
@@ -92,7 +108,8 @@ export function AdminSolicitacoesPage() {
                       size="sm"
                       variant="ghost"
                       onClick={() => changeStatus(s.id, 'RECUSADA')}
-                      loading={updateMutation.isPending}
+                      loading={updateMutation.isPending && pendingId === s.id}
+                      aria-label={`Recusar solicitação de ${s.adotante.nome} para ${s.pet.nome}`}
                     >
                       Recusar
                     </Button>
