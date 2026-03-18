@@ -4,12 +4,15 @@ import { useCadastro } from '../features/auth/hooks/useCadastro'
 import { getApiError } from '../lib/api'
 import { Button } from '../components/ui/Button'
 import { Input } from '../components/ui/Input'
+import { useAuthContext } from '../contexts/AuthContext'
+import { login as loginApi } from '../features/auth/api'
 
 type Step = 'conta' | 'endereco'
 
 export function CadastroPage() {
   const navigate = useNavigate()
   const cadastroMutation = useCadastro()
+  const { login } = useAuthContext()
 
   const [step, setStep] = useState<Step>('conta')
   const [error, setError] = useState<string | null>(null)
@@ -49,7 +52,9 @@ export function CadastroPage() {
         dataNascimento,
         enderecoDTO: { logradouro, numero, bairro, cidade, estado, cep },
       })
-      navigate('/login', { state: { cadastrado: true } })
+      const { token } = await loginApi({ email, password })
+      login(token)
+      navigate('/')
     } catch (err) {
       setError(getApiError(err).message)
     }

@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useLogin } from '../features/auth/hooks/useLogin'
-import { useAuth } from '../hooks/useAuth'
+import { useAuthContext } from '../contexts/AuthContext'
 import { getApiError } from '../lib/api'
 import { Button } from '../components/ui/Button'
 import { Input } from '../components/ui/Input'
 
 export function LoginPage() {
   const navigate = useNavigate()
-  const { saveToken } = useAuth()
+  const { login } = useAuthContext()
   const loginMutation = useLogin()
 
   const [email, setEmail] = useState('')
@@ -21,7 +21,7 @@ export function LoginPage() {
 
     try {
       const { token } = await loginMutation.mutateAsync({ email, password })
-      saveToken(token)
+      login(token)
       navigate('/')
     } catch (err) {
       setError(getApiError(err).message)

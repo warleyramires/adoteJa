@@ -1,5 +1,6 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '../ui/Button'
+import { useAuthContext } from '../../contexts/AuthContext'
 
 const navLinks = [
   { to: '/pets', label: 'Adotar' },
@@ -8,7 +9,13 @@ const navLinks = [
 
 export function Header() {
   const location = useLocation()
-  const isAuthenticated = Boolean(localStorage.getItem('token'))
+  const navigate = useNavigate()
+  const { user, isAuthenticated, logout } = useAuthContext()
+
+  function handleLogout() {
+    logout()
+    navigate('/')
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-creme-100/90 backdrop-blur-md border-b border-areia-200">
@@ -39,10 +46,13 @@ export function Header() {
 
         {/* Actions */}
         <div className="flex items-center gap-3">
-          {isAuthenticated ? (
-            <Link to="/minha-conta">
-              <Button variant="ghost" size="sm">Minha conta</Button>
-            </Link>
+          {isAuthenticated && user ? (
+            <>
+              <span className="font-body text-sm text-carbon-800/70 hidden sm:block">
+                Olá, <strong className="text-carbon-800 font-medium">{user.email}</strong>
+              </span>
+              <Button variant="ghost" size="sm" onClick={handleLogout}>Sair</Button>
+            </>
           ) : (
             <>
               <Link to="/login">

@@ -3,7 +3,7 @@ import { PageLayout } from '../components/layout/PageLayout'
 import { Badge } from '../components/ui/Badge'
 import { usePets } from '../features/pets/hooks/usePets'
 import { especieLabel, porteLabel } from '../lib/utils'
-import type { Especie, Porte, PetFilters } from '../types'
+import type { Especie, PetFilters } from '../types'
 
 const especieOptions: { value: Especie | ''; label: string }[] = [
   { value: '', label: 'Todos' },
