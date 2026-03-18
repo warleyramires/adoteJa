@@ -108,6 +108,42 @@ export interface UpdateSolicitacaoRequest {
   status: StatusSolicitacao
 }
 
+export interface CreatePetRequest {
+  nome: string
+  descricao?: string
+  disponivel: boolean
+  saude?: {
+    vacinado?: boolean
+    castrado?: boolean
+    vermifugado?: boolean
+    historicoSaude?: string
+  }
+  caracteristica?: {
+    especie: Especie
+    porte: Porte
+    sexo: Sexo
+    cor?: string
+    raca?: string
+  }
+}
+
+export interface Funcionario {
+  id: number
+  nome: string
+  email: string
+  cargo: string | null
+  telefone1: string | null
+  telefone2: string | null
+}
+
+export interface CreateFuncionarioRequest {
+  nome: string
+  email: string
+  password: string
+  cargo?: string
+  telefone1?: string
+}
+
 // ── API Error ─────────────────────────────────────────────────────────────────
 
 export interface ApiError {
