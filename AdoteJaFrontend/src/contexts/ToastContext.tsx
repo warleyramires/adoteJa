@@ -1,8 +1,9 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
+import { ToastItem } from '../components/ui/Toast'
 
 export type ToastType = 'success' | 'error' | 'info'
 
-interface ToastItem {
+interface ToastEntry {
   id: number
   message: string
   type: ToastType
@@ -17,7 +18,7 @@ const ToastContext = createContext<ToastContextValue | null>(null)
 let nextId = 0
 
 export function ToastProvider({ children }: { children: ReactNode }) {
-  const [toasts, setToasts] = useState<ToastItem[]>([])
+  const [toasts, setToasts] = useState<ToastEntry[]>([])
 
   const showToast = useCallback((message: string, type: ToastType = 'info') => {
     const id = ++nextId
@@ -32,15 +33,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {children}
       <div className="fixed bottom-6 right-6 z-[100] flex flex-col gap-2 pointer-events-none">
         {toasts.map((toast) => (
-          <div
-            key={toast.id}
-            className={`font-body text-sm px-5 py-3 rounded-2xl shadow-lg text-white pointer-events-auto transition-all
-              ${toast.type === 'success' ? 'bg-floresta-500' :
-                toast.type === 'error'   ? 'bg-red-500'      :
-                                           'bg-carbon-800'}`}
-          >
-            {toast.message}
-          </div>
+          <ToastItem key={toast.id} message={toast.message} type={toast.type} />
         ))}
       </div>
     </ToastContext.Provider>
