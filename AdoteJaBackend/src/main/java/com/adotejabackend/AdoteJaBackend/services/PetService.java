@@ -11,7 +11,9 @@ import com.adotejabackend.AdoteJaBackend.repositories.PetRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -20,11 +22,16 @@ public class PetService {
     @Autowired
     private PetRepository petRepository;
 
-    public RecoveryPetDTO create(CreatePetDTO dto) {
+    @Autowired
+    private S3Service s3Service;
+
+    public RecoveryPetDTO create(CreatePetDTO dto, MultipartFile imagem) {
+        String imagemUrl = uploadIfPresent(imagem);
+
         Pet pet = Pet.builder()
                 .nome(dto.nome())
                 .descricao(dto.descricao())
-                .imagemUrl(dto.imagemUrl())
+                .imagemUrl(imagemUrl)
                 .disponivel(true)
                 .saude(toSaudeEntity(dto.saude()))
                 .caracteristica(toCaracteristicaEntity(dto.caracteristica()))
@@ -42,14 +49,16 @@ public class PetService {
                 .orElseThrow(() -> new EntityNotFoundException("Pet não encontrado: " + id)));
     }
 
-    public RecoveryPetDTO update(Long id, UpdatePetDTO dto) {
+    public RecoveryPetDTO update(Long id, UpdatePetDTO dto, MultipartFile imagem) {
         Pet pet = petRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pet não encontrado: " + id));
 
         if (dto.nome() != null) pet.setNome(dto.nome());
         if (dto.descricao() != null) pet.setDescricao(dto.descricao());
-        if (dto.imagemUrl() != null) pet.setImagemUrl(dto.imagemUrl());
         if (dto.disponivel() != null) pet.setDisponivel(dto.disponivel());
+
+        String novaUrl = uploadIfPresent(imagem);
+        if (novaUrl != null) pet.setImagemUrl(novaUrl);
 
         if (dto.saude() != null) {
             Saude s = pet.getSaude();
@@ -76,6 +85,15 @@ public class PetService {
             throw new EntityNotFoundException("Pet não encontrado: " + id);
         }
         petRepository.deleteById(id);
+    }
+
+    private String uploadIfPresent(MultipartFile imagem) {
+        if (imagem == null || imagem.isEmpty()) return null;
+        try {
+            return s3Service.uploadFile(imagem, "pets");
+        } catch (IOException e) {
+            throw new RuntimeException("Falha ao fazer upload da imagem: " + e.getMessage(), e);
+        }
     }
 
     private Saude toSaudeEntity(SaudeDTO dto) {
