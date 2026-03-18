@@ -73,6 +73,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/solicitacoes/minhas").hasRole("CUSTOMER")
                         .requestMatchers(HttpMethod.GET, "/solicitacoes").hasAnyRole("MEMBER", "ADMINISTRATOR")
                         .requestMatchers(HttpMethod.PUT, "/solicitacoes/**").hasAnyRole("MEMBER", "ADMINISTRATOR")
+                        // Usuário autenticado
+                        .requestMatchers(HttpMethod.GET, "/users/me").authenticated()
                         // Testes
                         .requestMatchers("/users/test").authenticated()
                         .requestMatchers("/users/test/customer").hasRole("CUSTOMER")

@@ -2,12 +2,16 @@ package com.adotejabackend.AdoteJaBackend.controllers;
 
 import com.adotejabackend.AdoteJaBackend.dtos.CreateUsuarioDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.LoginUsuarioDTO;
+import com.adotejabackend.AdoteJaBackend.dtos.MeResponseDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.RecoveryJwtTokenDTO;
+import com.adotejabackend.AdoteJaBackend.models.Usuario;
+import com.adotejabackend.AdoteJaBackend.repositories.UsuarioRepository;
 import com.adotejabackend.AdoteJaBackend.services.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,6 +20,9 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @PostMapping("/login")
     public ResponseEntity<RecoveryJwtTokenDTO> authenticate(@Valid @RequestBody LoginUsuarioDTO loginUsuarioDTO){
@@ -29,6 +36,18 @@ public class UsuarioController {
         usuarioService.createUsuario(createUsuarioDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+    @GetMapping("/me")
+    public ResponseEntity<MeResponseDTO> me(Authentication authentication) {
+        String email = authentication.getName();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        String role = usuario.getRoles().stream()
+                .findFirst()
+                .map(r -> r.getName().name())
+                .orElse("ROLE_CUSTOMER");
+        return ResponseEntity.ok(new MeResponseDTO(usuario.getId(), usuario.getNome(), email, role));
+    }
+
     @GetMapping("/test")
     public ResponseEntity<String> getAuthenticationTest() {
         return new ResponseEntity<>("Autenticado com sucesso", HttpStatus.OK);
