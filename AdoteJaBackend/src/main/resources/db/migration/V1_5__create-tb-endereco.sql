@@ -1,6 +1,6 @@
 CREATE TABLE tb_endereco (
-    id SERIAL PRIMARY KEY,
-    logadouro VARCHAR(255) NOT NULL,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    logradouro VARCHAR(255) NOT NULL,
     numero VARCHAR(50),
     bairro VARCHAR(100),
     cidade VARCHAR(100) NOT NULL,
