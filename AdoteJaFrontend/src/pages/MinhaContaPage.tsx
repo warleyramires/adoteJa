@@ -12,7 +12,7 @@ export function MinhaContaPage() {
   const { showToast } = useToast()
   const adotanteId = user?.id ?? 0
 
-  const { data: adotante, isLoading } = useAdotante(adotanteId)
+  const { data: adotante, isLoading, isError } = useAdotante(adotanteId)
   const updateMutation = useUpdateAdotante(adotanteId)
 
   const [nome, setNome]           = useState('')
@@ -44,6 +44,18 @@ export function MinhaContaPage() {
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="h-12 bg-areia-200 rounded-2xl" />
           ))}
+        </div>
+      </PageLayout>
+    )
+  }
+
+  if (isError) {
+    return (
+      <PageLayout>
+        <div className="text-center py-24">
+          <p className="font-display text-3xl font-light text-carbon-800/30">
+            Não foi possível carregar seus dados
+          </p>
         </div>
       </PageLayout>
     )
