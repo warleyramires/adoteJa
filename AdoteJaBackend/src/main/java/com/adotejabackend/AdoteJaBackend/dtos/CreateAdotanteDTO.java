@@ -1,9 +1,19 @@
 package com.adotejabackend.AdoteJaBackend.dtos;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+import java.time.LocalDate;
+
 public record CreateAdotanteDTO(
-        String email,
-        String telefone1,
+        @NotBlank String nome,
+        @NotBlank @Email String email,
+        @NotBlank String password,
+        @NotBlank String telefone1,
         String telefone2,
-        EnderecoDTO endereco
-) {
-}
+        @NotNull @Valid EnderecoDTO enderecoDTO,
+        @NotBlank String cpf,
+        @NotNull LocalDate dataNascimento
+) {}
