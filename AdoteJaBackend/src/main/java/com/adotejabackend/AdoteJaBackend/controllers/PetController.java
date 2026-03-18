@@ -10,8 +10,10 @@ import com.adotejabackend.AdoteJaBackend.services.PetService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,9 +24,11 @@ public class PetController {
     @Autowired
     private PetService petService;
 
-    @PostMapping
-    public ResponseEntity<RecoveryPetDTO> create(@Valid @RequestBody CreatePetDTO dto) {
-        return new ResponseEntity<>(petService.create(dto), HttpStatus.CREATED);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<RecoveryPetDTO> create(
+            @RequestPart("dados") @Valid CreatePetDTO dto,
+            @RequestPart(value = "imagem", required = false) MultipartFile imagem) {
+        return new ResponseEntity<>(petService.create(dto, imagem), HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -41,9 +45,12 @@ public class PetController {
         return ResponseEntity.ok(petService.findById(id));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<RecoveryPetDTO> update(@PathVariable Long id, @RequestBody UpdatePetDTO dto) {
-        return ResponseEntity.ok(petService.update(id, dto));
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<RecoveryPetDTO> update(
+            @PathVariable Long id,
+            @RequestPart("dados") UpdatePetDTO dto,
+            @RequestPart(value = "imagem", required = false) MultipartFile imagem) {
+        return ResponseEntity.ok(petService.update(id, dto, imagem));
     }
 
     @DeleteMapping("/{id}")
