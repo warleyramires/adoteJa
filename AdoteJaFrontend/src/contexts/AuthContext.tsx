@@ -1,59 +1,67 @@
-import { createContext, useContext, useState, type ReactNode } from 'react'
-
-interface JwtPayload {
-  sub: string   // email
-  iss: string
-  iat: number
-  exp: number
-}
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react'
+import { fetchMe } from '../features/auth/api'
+import type { MeResponse } from '../types'
 
 interface AuthUser {
+  id: number
+  nome: string
   email: string
+  role: string
 }
 
 interface AuthContextValue {
   user: AuthUser | null
   isAuthenticated: boolean
-  login: (token: string) => void
+  isAdmin: boolean
+  isMember: boolean
+  login: (token: string) => Promise<void>
   logout: () => void
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
 
-function decodeToken(token: string): JwtPayload | null {
-  try {
-    const payload = token.split('.')[1]
-    return JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')))
-  } catch {
-    return null
-  }
-}
-
-function tokenToUser(token: string): AuthUser | null {
-  const payload = decodeToken(token)
-  if (!payload) return null
-  if (payload.exp * 1000 < Date.now()) return null   // reject expired tokens
-  return { email: payload.sub }
-}
-
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<AuthUser | null>(() => {
-    const token = localStorage.getItem('token')
-    return token ? tokenToUser(token) : null
-  })
+  const [user, setUser] = useState<AuthUser | null>(null)
+  const [initialized, setInitialized] = useState(false)
 
-  function login(token: string) {
+  // On mount: restore session from stored token
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      setInitialized(true)
+      return
+    }
+    fetchMe()
+      .then((data: MeResponse) => setUser(data))
+      .catch(() => {
+        localStorage.removeItem('token')
+      })
+      .finally(() => setInitialized(true))
+  }, [])
+
+  const login = useCallback(async (token: string) => {
     localStorage.setItem('token', token)
-    setUser(tokenToUser(token))
-  }
+    try {
+      const data = await fetchMe()
+      setUser(data)
+    } catch {
+      localStorage.removeItem('token')
+      setUser(null)
+    }
+  }, [])
 
   function logout() {
     localStorage.removeItem('token')
     setUser(null)
   }
 
+  const isAdmin  = user?.role === 'ROLE_ADMINISTRATOR'
+  const isMember = user?.role === 'ROLE_MEMBER' || isAdmin
+
+  if (!initialized) return null
+
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: user !== null, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated: user !== null, isAdmin, isMember, login, logout }}>
       {children}
     </AuthContext.Provider>
   )

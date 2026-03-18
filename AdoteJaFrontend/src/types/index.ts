@@ -17,6 +17,13 @@ export interface LoginResponse {
   token: string
 }
 
+export interface MeResponse {
+  id: number
+  nome: string
+  email: string
+  role: string
+}
+
 // ── Pet ──────────────────────────────────────────────────────────────────────
 
 export interface SaudeDTO {

@@ -49,7 +49,7 @@ export function Header() {
           {isAuthenticated && user ? (
             <>
               <span className="font-body text-sm text-carbon-800/70 hidden sm:block">
-                Olá, <strong className="text-carbon-800 font-medium">{user.email}</strong>
+                Olá, <strong className="text-carbon-800 font-medium">{user.nome}</strong>
               </span>
               <Button variant="ghost" size="sm" onClick={handleLogout}>Sair</Button>
             </>
