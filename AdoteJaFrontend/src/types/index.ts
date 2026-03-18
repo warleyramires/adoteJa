@@ -80,6 +80,20 @@ export interface Adotante {
   dataNascimento: string | null
 }
 
+export interface UpdateAdotanteRequest {
+  nome?: string
+  telefone1?: string
+  telefone2?: string
+  enderecoDTO?: {
+    logradouro?: string
+    numero?: string
+    bairro?: string
+    cidade?: string
+    estado?: string
+    cep?: string
+  }
+}
+
 // ── Solicitacao ───────────────────────────────────────────────────────────────
 
 export interface Solicitacao {

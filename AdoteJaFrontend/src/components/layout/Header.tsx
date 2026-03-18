@@ -52,9 +52,14 @@ export function Header() {
                 Olá, <strong className="text-carbon-800 font-medium">{user.nome}</strong>
               </span>
               {!isMember && (
-                <Link to="/minhas-solicitacoes">
-                  <Button variant="ghost" size="sm">Minhas adoções</Button>
-                </Link>
+                <>
+                  <Link to="/minhas-solicitacoes">
+                    <Button variant="ghost" size="sm">Minhas adoções</Button>
+                  </Link>
+                  <Link to="/minha-conta">
+                    <Button variant="ghost" size="sm">Minha conta</Button>
+                  </Link>
+                </>
               )}
               <Button variant="ghost" size="sm" onClick={handleLogout}>Sair</Button>
             </>
