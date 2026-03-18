@@ -61,6 +61,11 @@ export function Header() {
                   </Link>
                 </>
               )}
+              {isMember && (
+                <Link to="/admin/solicitacoes">
+                  <Button variant="ghost" size="sm">Painel</Button>
+                </Link>
+              )}
               <Button variant="ghost" size="sm" onClick={handleLogout}>Sair</Button>
             </>
           ) : (
