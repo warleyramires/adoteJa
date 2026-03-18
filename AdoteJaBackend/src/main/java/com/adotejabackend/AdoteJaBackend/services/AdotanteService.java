@@ -15,6 +15,7 @@ import com.adotejabackend.AdoteJaBackend.repositories.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -62,6 +63,7 @@ public class AdotanteService {
                 .orElseThrow(() -> new EntityNotFoundException("Adotante não encontrado: " + id)));
     }
 
+    @Transactional
     public RecoveryAdotanteDTO update(Long id, UpdateAdotanteDTO dto) {
         Adotante adotante = adotanteRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Adotante não encontrado: " + id));

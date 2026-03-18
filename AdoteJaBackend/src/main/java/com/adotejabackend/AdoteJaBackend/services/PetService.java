@@ -11,6 +11,7 @@ import com.adotejabackend.AdoteJaBackend.repositories.PetRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,6 +51,7 @@ public class PetService {
                 .orElseThrow(() -> new EntityNotFoundException("Pet não encontrado: " + id)));
     }
 
+    @Transactional
     public RecoveryPetDTO update(Long id, UpdatePetDTO dto, MultipartFile imagem) {
         Pet pet = petRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pet não encontrado: " + id));

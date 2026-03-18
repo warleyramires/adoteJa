@@ -14,6 +14,7 @@ import com.adotejabackend.AdoteJaBackend.repositories.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -72,6 +73,7 @@ public class FuncionarioService {
         funcionarioRepository.deleteById(id);
     }
 
+    @Transactional
     public RecoveryFuncionarioDTO update(Long id, UpdateFuncionarioDTO dto) {
         Funcionario funcionario = funcionarioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado: " + id));
