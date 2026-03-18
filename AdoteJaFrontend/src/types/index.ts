@@ -21,7 +21,7 @@ export interface MeResponse {
   id: number
   nome: string
   email: string
-  role: string
+  role: RoleName
 }
 
 // ── Pet ──────────────────────────────────────────────────────────────────────

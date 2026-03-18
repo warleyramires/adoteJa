@@ -1,12 +1,12 @@
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react'
 import { fetchMe } from '../features/auth/api'
-import type { MeResponse } from '../types'
+import type { MeResponse, RoleName } from '../types'
 
 interface AuthUser {
   id: number
   nome: string
   email: string
-  role: string
+  role: RoleName
 }
 
 interface AuthContextValue {
