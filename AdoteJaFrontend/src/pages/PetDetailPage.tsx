@@ -1,4 +1,4 @@
-import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { PageLayout } from '../components/layout/PageLayout'
 import { Badge } from '../components/ui/Badge'
 import { Button } from '../components/ui/Button'
@@ -11,7 +11,6 @@ import { getApiError } from '../lib/api'
 
 export function PetDetailPage() {
   const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
   const { isAuthenticated } = useAuthContext()
   const { showToast } = useToast()
 
@@ -19,11 +18,20 @@ export function PetDetailPage() {
   const { data: pet, isLoading, isError } = usePet(petId)
   const solicitarMutation = useCriarSolicitacao()
 
+  if (!id || isNaN(petId)) {
+    return (
+      <PageLayout>
+        <div className="text-center py-24">
+          <p className="font-display text-3xl font-light text-carbon-800/30 mb-4">Pet não encontrado</p>
+          <Link to="/pets">
+            <Button variant="ghost">← Voltar para listagem</Button>
+          </Link>
+        </div>
+      </PageLayout>
+    )
+  }
+
   async function handleSolicitar() {
-    if (!isAuthenticated) {
-      navigate('/login')
-      return
-    }
     try {
       await solicitarMutation.mutateAsync(petId)
       showToast('Solicitação enviada com sucesso! Aguarde o contato da ONG.', 'success')
