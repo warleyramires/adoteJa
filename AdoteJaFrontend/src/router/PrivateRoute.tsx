@@ -7,6 +7,7 @@ export function PrivateRoute() {
 }
 
 export function AdminRoute() {
-  const { isMember } = useAuthContext()
+  const { isAuthenticated, isMember } = useAuthContext()
+  if (!isAuthenticated) return <Navigate to="/login" replace />
   return isMember ? <Outlet /> : <Navigate to="/" replace />
 }
