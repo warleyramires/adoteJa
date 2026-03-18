@@ -32,6 +32,7 @@ function decodeToken(token: string): JwtPayload | null {
 function tokenToUser(token: string): AuthUser | null {
   const payload = decodeToken(token)
   if (!payload) return null
+  if (payload.exp * 1000 < Date.now()) return null   // reject expired tokens
   return { email: payload.sub }
 }
 

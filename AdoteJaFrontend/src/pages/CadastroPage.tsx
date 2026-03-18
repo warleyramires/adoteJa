@@ -16,6 +16,7 @@ export function CadastroPage() {
 
   const [step, setStep] = useState<Step>('conta')
   const [error, setError] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Dados pessoais
   const [nome, setNome] = useState('')
@@ -41,7 +42,7 @@ export function CadastroPage() {
   async function handleEnderecoSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
-
+    setIsSubmitting(true)
     try {
       await cadastroMutation.mutateAsync({
         nome,
@@ -57,6 +58,8 @@ export function CadastroPage() {
       navigate('/')
     } catch (err) {
       setError(getApiError(err).message)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -152,7 +155,7 @@ export function CadastroPage() {
                   <p className="font-body text-sm text-red-500 bg-red-50 px-4 py-3 rounded-2xl">{error}</p>
                 )}
 
-                <Button type="submit" loading={cadastroMutation.isPending} className="mt-2 w-full">
+                <Button type="submit" loading={isSubmitting} className="mt-2 w-full">
                   Criar minha conta
                 </Button>
               </form>
