@@ -100,8 +100,14 @@ export interface Solicitacao {
   id: number
   status: StatusSolicitacao
   dataSolicitacao: string
-  pet: Pet
-  adotante: Adotante
+  dataResposta: string | null
+  observacao: string | null
+  petId: number
+  nomePet: string
+  imagemUrl: string | null
+  especie: Especie | null
+  adotanteId: number
+  nomeAdotante: string
 }
 
 export interface UpdateSolicitacaoRequest {

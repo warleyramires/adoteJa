@@ -82,12 +82,17 @@ public class SolicitacaoService {
     }
 
     private RecoverySolicitacaoDTO toRecoveryDTO(Solicitacao s) {
+        String especie = (s.getPet().getCaracteristica() != null)
+                ? s.getPet().getCaracteristica().getEspecie().name()
+                : null;
         return new RecoverySolicitacaoDTO(
                 s.getId(),
                 s.getAdotante().getId(),
                 s.getAdotante().getNome(),
                 s.getPet().getId(),
                 s.getPet().getNome(),
+                s.getPet().getImagemUrl(),
+                especie,
                 s.getStatus(),
                 s.getDataSolicitacao(),
                 s.getDataResposta(),

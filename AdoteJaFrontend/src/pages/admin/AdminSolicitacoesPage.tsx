@@ -70,8 +70,8 @@ export function AdminSolicitacoesPage() {
             <div key={s.id} className="card p-5 flex items-center gap-5">
               {/* Foto */}
               <div className="w-16 h-16 rounded-2xl bg-areia-100 overflow-hidden flex-shrink-0">
-                {s.pet.imagemUrl
-                  ? <img src={s.pet.imagemUrl} alt={s.pet.nome} className="w-full h-full object-cover" />
+                {s.imagemUrl
+                  ? <img src={s.imagemUrl} alt={s.nomePet} className="w-full h-full object-cover" />
                   : <div className="w-full h-full flex items-center justify-center text-2xl">🐾</div>
                 }
               </div>
@@ -79,15 +79,15 @@ export function AdminSolicitacoesPage() {
               {/* Info */}
               <div className="flex-1 min-w-0">
                 <p className="font-display text-lg font-medium text-carbon-800">
-                  {s.pet.nome}
-                  {s.pet.caracteristica?.especie && (
+                  {s.nomePet}
+                  {s.especie && (
                     <span className="ml-2 font-body text-sm font-normal text-carbon-800/50">
-                      {especieLabel[s.pet.caracteristica.especie]}
+                      {especieLabel[s.especie]}
                     </span>
                   )}
                 </p>
                 <p className="font-body text-sm text-carbon-800/50">
-                  {s.adotante.nome} · {formatDate(s.dataSolicitacao)}
+                  {s.nomeAdotante} · {formatDate(s.dataSolicitacao)}
                 </p>
               </div>
 
@@ -100,7 +100,7 @@ export function AdminSolicitacoesPage() {
                       size="sm"
                       onClick={() => changeStatus(s.id, 'APROVADA')}
                       loading={updateMutation.isPending && pendingId === s.id}
-                      aria-label={`Aprovar solicitação de ${s.adotante.nome} para ${s.pet.nome}`}
+                      aria-label={`Aprovar solicitação de ${s.nomeAdotante} para ${s.nomePet}`}
                     >
                       Aprovar
                     </Button>
@@ -109,7 +109,7 @@ export function AdminSolicitacoesPage() {
                       variant="ghost"
                       onClick={() => changeStatus(s.id, 'RECUSADA')}
                       loading={updateMutation.isPending && pendingId === s.id}
-                      aria-label={`Recusar solicitação de ${s.adotante.nome} para ${s.pet.nome}`}
+                      aria-label={`Recusar solicitação de ${s.nomeAdotante} para ${s.nomePet}`}
                     >
                       Recusar
                     </Button>

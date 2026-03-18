@@ -17,6 +17,6 @@ export async function fetchTodasSolicitacoes(): Promise<Solicitacao[]> {
 }
 
 export async function updateSolicitacao(id: number, data: UpdateSolicitacaoRequest): Promise<Solicitacao> {
-  const response = await api.put<Solicitacao>(`/solicitacoes/${id}`, data)
+  const response = await api.put<Solicitacao>(`/solicitacoes/${id}/status`, data)
   return response.data
 }

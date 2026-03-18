@@ -10,6 +10,8 @@ public record RecoverySolicitacaoDTO(
         String nomeAdotante,
         Long petId,
         String nomePet,
+        String imagemUrl,
+        String especie,
         StatusSolicitacao status,
         LocalDateTime dataSolicitacao,
         LocalDateTime dataResposta,
