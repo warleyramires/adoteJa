@@ -4,6 +4,7 @@ import com.adotejabackend.AdoteJaBackend.config.SecurityConfiguration;
 import com.adotejabackend.AdoteJaBackend.dtos.CreateUsuarioDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.EnderecoDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.LoginUsuarioDTO;
+import com.adotejabackend.AdoteJaBackend.dtos.MeResponseDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.RecoveryJwtTokenDTO;
 import com.adotejabackend.AdoteJaBackend.models.Endereco;
 import com.adotejabackend.AdoteJaBackend.models.Usuario;
@@ -11,10 +12,12 @@ import com.adotejabackend.AdoteJaBackend.models.UsuarioDetailsImpl;
 import com.adotejabackend.AdoteJaBackend.repositories.RoleRepository;
 import com.adotejabackend.AdoteJaBackend.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -70,6 +73,16 @@ public class UsuarioService {
 
         endereco.setUsuario(newUsuario);
         usuarioRepository.save(newUsuario);
+    }
+
+    public MeResponseDTO getMe(String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+        String role = usuario.getRoles().stream()
+                .findFirst()
+                .map(r -> r.getName().name())
+                .orElse("ROLE_CUSTOMER");
+        return new MeResponseDTO(usuario.getId(), usuario.getNome(), email, role);
     }
 
     private Endereco convertEnderecoDTOToEntity(EnderecoDTO dto) {
