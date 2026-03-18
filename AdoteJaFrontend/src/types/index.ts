@@ -104,6 +104,10 @@ export interface Solicitacao {
   adotante: Adotante
 }
 
+export interface UpdateSolicitacaoRequest {
+  status: StatusSolicitacao
+}
+
 // ── API Error ─────────────────────────────────────────────────────────────────
 
 export interface ApiError {
