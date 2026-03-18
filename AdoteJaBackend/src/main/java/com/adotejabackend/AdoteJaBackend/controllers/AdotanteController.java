@@ -2,6 +2,7 @@ package com.adotejabackend.AdoteJaBackend.controllers;
 
 import com.adotejabackend.AdoteJaBackend.dtos.CreateAdotanteDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.RecoveryAdotanteDTO;
+import com.adotejabackend.AdoteJaBackend.dtos.UpdateAdotanteDTO;
 import com.adotejabackend.AdoteJaBackend.services.AdotanteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +25,12 @@ public class AdotanteController {
     @GetMapping("/{id}")
     public ResponseEntity<RecoveryAdotanteDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(adotanteService.findById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<RecoveryAdotanteDTO> update(
+            @PathVariable Long id,
+            @RequestBody UpdateAdotanteDTO dto) {
+        return ResponseEntity.ok(adotanteService.update(id, dto));
     }
 }

@@ -4,6 +4,8 @@ import com.adotejabackend.AdoteJaBackend.config.SecurityConfiguration;
 import com.adotejabackend.AdoteJaBackend.dtos.CreateAdotanteDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.EnderecoDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.RecoveryAdotanteDTO;
+import com.adotejabackend.AdoteJaBackend.dtos.UpdateAdotanteDTO;
+import com.adotejabackend.AdoteJaBackend.dtos.UpdateEnderecoDTO;
 import com.adotejabackend.AdoteJaBackend.enums.RoleName;
 import com.adotejabackend.AdoteJaBackend.models.Adotante;
 import com.adotejabackend.AdoteJaBackend.models.Endereco;
@@ -58,6 +60,29 @@ public class AdotanteService {
     public RecoveryAdotanteDTO findById(Long id) {
         return toRecoveryDTO(adotanteRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Adotante não encontrado: " + id)));
+    }
+
+    public RecoveryAdotanteDTO update(Long id, UpdateAdotanteDTO dto) {
+        Adotante adotante = adotanteRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Adotante não encontrado: " + id));
+
+        if (dto.nome() != null) adotante.setNome(dto.nome());
+        if (dto.telefone1() != null) adotante.setTelefone1(dto.telefone1());
+        if (dto.telefone2() != null) adotante.setTelefone2(dto.telefone2());
+        if (dto.cpf() != null) adotante.setCpf(dto.cpf());
+        if (dto.dataNascimento() != null) adotante.setDataNascimento(dto.dataNascimento());
+
+        if (dto.endereco() != null && adotante.getEndereco() != null) {
+            Endereco e = adotante.getEndereco();
+            if (dto.endereco().logradouro() != null) e.setLogradouro(dto.endereco().logradouro());
+            if (dto.endereco().numero() != null) e.setNumero(dto.endereco().numero());
+            if (dto.endereco().bairro() != null) e.setBairro(dto.endereco().bairro());
+            if (dto.endereco().cidade() != null) e.setCidade(dto.endereco().cidade());
+            if (dto.endereco().estado() != null) e.setEstado(dto.endereco().estado());
+            if (dto.endereco().cep() != null) e.setCep(dto.endereco().cep());
+        }
+
+        return toRecoveryDTO(adotanteRepository.save(adotante));
     }
 
     private Endereco toEnderecoEntity(EnderecoDTO dto) {
