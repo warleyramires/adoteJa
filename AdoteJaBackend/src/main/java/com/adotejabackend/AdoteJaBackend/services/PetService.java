@@ -11,10 +11,11 @@ import com.adotejabackend.AdoteJaBackend.repositories.PetRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 
 @Service
 public class PetService {
@@ -39,9 +40,9 @@ public class PetService {
         return toRecoveryDTO(petRepository.save(pet));
     }
 
-    public List<RecoveryPetDTO> findAll(Especie especie, Porte porte, Sexo sexo, Boolean disponivel) {
-        return petRepository.findWithFilters(especie, porte, sexo, disponivel)
-                .stream().map(this::toRecoveryDTO).toList();
+    public Page<RecoveryPetDTO> findAll(Especie especie, Porte porte, Sexo sexo, Boolean disponivel, Pageable pageable) {
+        return petRepository.findWithFilters(especie, porte, sexo, disponivel, pageable)
+                .map(this::toRecoveryDTO);
     }
 
     public RecoveryPetDTO findById(Long id) {
