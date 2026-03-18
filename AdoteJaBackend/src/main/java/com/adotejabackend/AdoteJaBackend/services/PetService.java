@@ -89,6 +89,10 @@ public class PetService {
 
     private String uploadIfPresent(MultipartFile imagem) {
         if (imagem == null || imagem.isEmpty()) return null;
+        String contentType = imagem.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new IllegalArgumentException("Tipo de arquivo inválido: apenas imagens são aceitas.");
+        }
         try {
             return s3Service.uploadFile(imagem, "pets");
         } catch (IOException e) {
