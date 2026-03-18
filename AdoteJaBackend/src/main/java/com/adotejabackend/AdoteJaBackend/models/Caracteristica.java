@@ -4,23 +4,32 @@ import com.adotejabackend.AdoteJaBackend.enums.Especie;
 import com.adotejabackend.AdoteJaBackend.enums.Porte;
 import com.adotejabackend.AdoteJaBackend.enums.Sexo;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="tb_caracteristica")
+@Table(name = "tb_caracteristica")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Caracteristica {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String raca;
     private String cor;
 
     @Enumerated(EnumType.STRING)
     private Especie especie;
+
     @Enumerated(EnumType.STRING)
     private Porte porte;
+
     @Enumerated(EnumType.STRING)
     private Sexo sexo;
-
-
 }
