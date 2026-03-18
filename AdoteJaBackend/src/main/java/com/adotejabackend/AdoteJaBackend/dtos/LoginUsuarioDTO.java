@@ -1,8 +1,9 @@
 package com.adotejabackend.AdoteJaBackend.dtos;
 
-public record LoginUsuarioDTO(
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
-        String email,
-        String password
-) {
-}
+public record LoginUsuarioDTO(
+        @NotBlank @Email String email,
+        @NotBlank String password
+) {}

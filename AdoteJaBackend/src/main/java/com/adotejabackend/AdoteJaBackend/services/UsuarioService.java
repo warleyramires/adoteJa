@@ -63,7 +63,7 @@ public class UsuarioService {
                 .password(securityConfiguration.passwordEncoder().encode(createUsuarioDTO.password()))
                 .roles(List.of(roleRepository.findByName(createUsuarioDTO.role())
                         .orElseThrow(() -> new RuntimeException("Role não encontrada: " + createUsuarioDTO.role()))))
-                .telefone1(createUsuarioDTO.telefon1())
+                .telefone1(createUsuarioDTO.telefone1())
                 .telefone2(createUsuarioDTO.telefone2())
                 .endereco(endereco)
                 .build();

@@ -1,12 +1,12 @@
 package com.adotejabackend.AdoteJaBackend.dtos;
 
-public record EnderecoDTO(
+import jakarta.validation.constraints.NotBlank;
 
-         String logradouro,
-         String numero,
-         String bairro,
-         String cidade,
-         String estado,
-         String cep
-) {
-}
+public record EnderecoDTO(
+        @NotBlank String logradouro,
+        String numero,
+        String bairro,
+        @NotBlank String cidade,
+        @NotBlank String estado,
+        @NotBlank String cep
+) {}

@@ -4,6 +4,7 @@ import com.adotejabackend.AdoteJaBackend.dtos.CreateUsuarioDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.LoginUsuarioDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.RecoveryJwtTokenDTO;
 import com.adotejabackend.AdoteJaBackend.services.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +18,14 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @PostMapping("/login")
-    public ResponseEntity<RecoveryJwtTokenDTO> authenticate(@RequestBody LoginUsuarioDTO loginUsuarioDTO){
+    public ResponseEntity<RecoveryJwtTokenDTO> authenticate(@Valid @RequestBody LoginUsuarioDTO loginUsuarioDTO){
         RecoveryJwtTokenDTO token = usuarioService.authenticateUsuario(loginUsuarioDTO);
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
     @PostMapping()
     public ResponseEntity<Void> createUsuarioCustomer(
-                                @RequestBody CreateUsuarioDTO createUsuarioDTO){
+                                @Valid @RequestBody CreateUsuarioDTO createUsuarioDTO){
         usuarioService.createUsuario(createUsuarioDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
