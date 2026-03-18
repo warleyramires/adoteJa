@@ -6,3 +6,7 @@ CREATE TABLE tb_users (
     telefone1  VARCHAR(20),
     telefone2  VARCHAR(20)
 );
+
+ALTER TABLE tb_endereco
+    ADD COLUMN usuario_id BIGINT,
+    ADD CONSTRAINT fk_endereco_usuario FOREIGN KEY (usuario_id) REFERENCES tb_users(id);
