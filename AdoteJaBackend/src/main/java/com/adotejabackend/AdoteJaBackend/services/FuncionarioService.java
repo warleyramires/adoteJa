@@ -109,7 +109,7 @@ public class FuncionarioService {
     private RecoveryFuncionarioDTO toRecoveryDTO(Funcionario f) {
         return new RecoveryFuncionarioDTO(
                 f.getId(), f.getNome(), f.getEmail(),
-                f.getTelefone1(), f.getMatricula(), f.getCargo()
+                f.getTelefone1(), f.getTelefone2(), f.getMatricula(), f.getCargo()
         );
     }
 }

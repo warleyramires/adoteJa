@@ -5,6 +5,7 @@ public record RecoveryFuncionarioDTO(
         String nome,
         String email,
         String telefone1,
+        String telefone2,
         String matricula,
         String cargo
 ) {}
