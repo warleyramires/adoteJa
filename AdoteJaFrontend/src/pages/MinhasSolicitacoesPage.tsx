@@ -12,7 +12,7 @@ const statusConfig: Record<StatusSolicitacao, { label: string; variant: 'florest
 }
 
 export function MinhasSolicitacoesPage() {
-  const { data: solicitacoes, isLoading } = useMinhasSolicitacoes()
+  const { data: solicitacoes, isLoading, isError } = useMinhasSolicitacoes()
 
   return (
     <PageLayout>
@@ -26,6 +26,12 @@ export function MinhasSolicitacoesPage() {
           {Array.from({ length: 3 }).map((_, i) => (
             <div key={i} className="card animate-pulse h-28" />
           ))}
+        </div>
+      ) : isError ? (
+        <div className="text-center py-24">
+          <p className="font-display text-3xl font-light text-carbon-800/30">
+            Erro ao carregar solicitações
+          </p>
         </div>
       ) : !solicitacoes?.length ? (
         <div className="text-center py-24">
