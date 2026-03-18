@@ -10,7 +10,7 @@ import { PetFormModal } from '../../features/pets/components/PetFormModal'
 import type { Pet } from '../../types'
 
 export function AdminPetsPage() {
-  const { data, isLoading } = usePets({ size: 50 })
+  const { data, isLoading, isError } = usePets({ size: 50 })
   const deleteMutation = useDeletePet()
   const { showToast } = useToast()
   const [editPet, setEditPet] = useState<Pet | null>(null)
@@ -45,6 +45,10 @@ export function AdminPetsPage() {
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="card animate-pulse h-40" />
           ))}
+        </div>
+      ) : isError ? (
+        <div className="text-center py-24">
+          <p className="font-display text-3xl font-light text-carbon-800/30">Erro ao carregar pets.</p>
         </div>
       ) : (data?.content ?? []).length === 0 ? (
         <div className="text-center py-24">

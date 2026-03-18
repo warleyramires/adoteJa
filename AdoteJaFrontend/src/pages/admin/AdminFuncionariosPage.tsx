@@ -7,7 +7,7 @@ import { useToast } from '../../contexts/ToastContext'
 import { getApiError } from '../../lib/api'
 
 export function AdminFuncionariosPage() {
-  const { data: funcionarios, isLoading } = useFuncionarios()
+  const { data: funcionarios, isLoading, isError } = useFuncionarios()
   const createMutation = useCreateFuncionario()
   const { showToast } = useToast()
 
@@ -16,6 +16,11 @@ export function AdminFuncionariosPage() {
   const [email, setEmail]       = useState('')
   const [password, setPassword] = useState('')
   const [cargo, setCargo]       = useState('')
+
+  function handleCancel() {
+    setShowForm(false)
+    setNome(''); setEmail(''); setPassword(''); setCargo('')
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -36,7 +41,7 @@ export function AdminFuncionariosPage() {
           <p className="section-label mb-2">Painel</p>
           <h1 className="font-display text-5xl font-light text-carbon-800">Funcionários</h1>
         </div>
-        <Button onClick={() => setShowForm(!showForm)}>
+        <Button onClick={showForm ? handleCancel : () => setShowForm(true)}>
           {showForm ? 'Cancelar' : '+ Novo funcionário'}
         </Button>
       </div>
@@ -55,6 +60,10 @@ export function AdminFuncionariosPage() {
       {isLoading ? (
         <div className="space-y-3">
           {Array.from({ length: 4 }).map((_, i) => <div key={i} className="card animate-pulse h-16" />)}
+        </div>
+      ) : isError ? (
+        <div className="text-center py-24">
+          <p className="font-display text-3xl font-light text-carbon-800/30">Erro ao carregar funcionários.</p>
         </div>
       ) : (funcionarios ?? []).length === 0 ? (
         <div className="text-center py-24">

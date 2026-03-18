@@ -62,9 +62,17 @@ export function Header() {
                 </>
               )}
               {isMember && (
-                <Link to="/admin/solicitacoes">
-                  <Button variant="ghost" size="sm">Painel</Button>
-                </Link>
+                <>
+                  <Link to="/admin/solicitacoes">
+                    <Button variant="ghost" size="sm">Solicitações</Button>
+                  </Link>
+                  <Link to="/admin/pets">
+                    <Button variant="ghost" size="sm">Pets</Button>
+                  </Link>
+                  <Link to="/admin/funcionarios">
+                    <Button variant="ghost" size="sm">Funcionários</Button>
+                  </Link>
+                </>
               )}
               <Button variant="ghost" size="sm" onClick={handleLogout}>Sair</Button>
             </>

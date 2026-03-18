@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Input } from '../../../components/ui/Input'
 import { Button } from '../../../components/ui/Button'
 import { useCreatePet, useUpdatePet } from '../hooks/useAdminPets'
@@ -31,6 +31,14 @@ export function PetFormModal({ pet, onClose }: PetFormModalProps) {
 
   const isPending = createMutation.isPending || updateMutation.isPending
 
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [onClose])
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const data = {
@@ -55,13 +63,22 @@ export function PetFormModal({ pet, onClose }: PetFormModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="bg-white rounded-3xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-8">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="pet-modal-title"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-3xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-8"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-display text-3xl font-light text-carbon-800">
+          <h2 id="pet-modal-title" className="font-display text-3xl font-light text-carbon-800">
             {isEditing ? 'Editar pet' : 'Novo pet'}
           </h2>
-          <button onClick={onClose} className="font-body text-carbon-800/40 hover:text-carbon-800">&#x2715;</button>
+          <button aria-label="Fechar" onClick={onClose} className="font-body text-carbon-800/40 hover:text-carbon-800">&#x2715;</button>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
