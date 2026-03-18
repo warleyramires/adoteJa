@@ -5,6 +5,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -14,39 +15,38 @@ import java.time.ZonedDateTime;
 @Service
 public class JwtTokenService {
 
-    private static final String SECRET_KEY = "pP9_AVcYglvxUqG4DpJldqy7v7dtGmdu3E3d3z1E6sw";
+    @Value("${api.security.token.secret}")
+    private String secretKey;
 
-    private static final String ISSUER = "pizzurg-api";
+    @Value("${api.security.token.issuer}")
+    private String issuer;
 
     public String generateToken(UsuarioDetailsImpl usuario) {
-        try{
-            Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
-
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secretKey);
             return JWT.create()
-                    .withIssuer(ISSUER)
+                    .withIssuer(issuer)
                     .withIssuedAt(creationDate())
                     .withExpiresAt(expirationDate())
                     .withSubject(usuario.getUsername())
-                    //.withClaim("userId", usuario.getId())
                     .sign(algorithm);
-        }catch (JWTCreationException exception){
+        } catch (JWTCreationException exception) {
             throw new JWTCreationException("Erro ao gerar token", exception);
         }
     }
 
     public String getSubjectFromToken(String token) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
+            Algorithm algorithm = Algorithm.HMAC256(secretKey);
             return JWT.require(algorithm)
-                    .withIssuer(ISSUER)
+                    .withIssuer(issuer)
                     .build()
                     .verify(token)
                     .getSubject();
-        } catch (JWTVerificationException exception){
+        } catch (JWTVerificationException exception) {
             throw new JWTVerificationException("Token inválido ou expirado.");
         }
     }
-
 
     private Instant creationDate() {
         return ZonedDateTime.now(ZoneId.of("America/Recife")).toInstant();
