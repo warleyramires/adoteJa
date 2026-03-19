@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { PageLayout } from '../components/layout/PageLayout'
 import { Button } from '../components/ui/Button'
@@ -26,20 +26,20 @@ export function HomePage() {
   const hoveredRef = useRef(false)
   const total = carouselImages.length
 
-  function goTo(index: number) {
+  const goTo = useCallback((index: number) => {
     setVisible(false)
     setTimeout(() => {
       setCurrent((index + total) % total)
       setVisible(true)
     }, 300)
-  }
+  }, [total])
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (!hoveredRef.current) goTo(current + 1)
     }, 3000)
     return () => clearInterval(interval)
-  }, [current])
+  }, [current, goTo])
 
   return (
     <PageLayout fluid>
