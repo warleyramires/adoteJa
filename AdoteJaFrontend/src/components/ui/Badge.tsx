@@ -1,6 +1,6 @@
 import { cn } from '../../lib/utils'
 
-type BadgeVariant = 'terracota' | 'floresta' | 'areia' | 'neutral'
+type BadgeVariant = 'ambar' | 'azul' | 'pedra' | 'neutral'
 
 interface BadgeProps {
   children: React.ReactNode
@@ -9,10 +9,10 @@ interface BadgeProps {
 }
 
 const variantClasses: Record<BadgeVariant, string> = {
-  terracota: 'bg-terracota-100 text-terracota-700',
-  floresta:  'bg-floresta-100 text-floresta-600',
-  areia:     'bg-areia-200 text-carbon-800',
-  neutral:   'bg-creme-300 text-carbon-800',
+  ambar:   'bg-ambar-100 text-ambar-700',
+  azul:    'bg-azul-100 text-azul-600',
+  pedra:   'bg-pedra-200 text-carbon-800',
+  neutral: 'bg-creme-300 text-carbon-800',
 }
 
 export function Badge({ children, variant = 'neutral', className }: BadgeProps) {

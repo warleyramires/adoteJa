@@ -5,10 +5,10 @@ import { useMinhasSolicitacoes } from '../features/adocao/hooks/useSolicitacoes'
 import { especieLabel, formatDate } from '../lib/utils'
 import type { StatusSolicitacao } from '../types'
 
-const statusConfig: Record<StatusSolicitacao, { label: string; variant: 'floresta' | 'terracota' | 'neutral' }> = {
+const statusConfig: Record<StatusSolicitacao, { label: string; variant: 'azul' | 'ambar' | 'neutral' }> = {
   PENDENTE:  { label: 'Pendente',  variant: 'neutral' },
-  APROVADA:  { label: 'Aprovada',  variant: 'floresta' },
-  RECUSADA:  { label: 'Recusada',  variant: 'terracota' },
+  APROVADA:  { label: 'Aprovada',  variant: 'azul' },
+  RECUSADA:  { label: 'Recusada',  variant: 'ambar' },
 }
 
 export function MinhasSolicitacoesPage() {
@@ -18,7 +18,7 @@ export function MinhasSolicitacoesPage() {
     <PageLayout>
       <div className="mb-10">
         <p className="section-label mb-2">Sua jornada</p>
-        <h1 className="font-display text-5xl font-light text-carbon-800">Minhas solicitações</h1>
+        <h1 className="font-display text-5xl font-normal text-carbon-800">Minhas solicitações</h1>
       </div>
 
       {isLoading ? (
@@ -29,18 +29,18 @@ export function MinhasSolicitacoesPage() {
         </div>
       ) : isError ? (
         <div className="text-center py-24">
-          <p className="font-display text-3xl font-light text-carbon-800/30">
+          <p className="font-display text-3xl font-normal text-carbon-800/30">
             Erro ao carregar solicitações
           </p>
         </div>
       ) : !solicitacoes?.length ? (
         <div className="text-center py-24">
-          <p className="font-display text-3xl font-light text-carbon-800/30 mb-4">
+          <p className="font-display text-3xl font-normal text-carbon-800/30 mb-4">
             Você ainda não fez solicitações
           </p>
           <Link
             to="/pets"
-            className="font-body text-sm text-terracota-500 hover:underline"
+            className="font-body text-sm text-ambar-500 hover:underline"
           >
             Ver animais disponíveis →
           </Link>
@@ -52,7 +52,7 @@ export function MinhasSolicitacoesPage() {
             return (
               <div key={s.id} className="card p-5 flex items-center gap-5">
                 {/* Foto */}
-                <div className="w-20 h-20 rounded-2xl bg-areia-100 overflow-hidden flex-shrink-0">
+                <div className="w-20 h-20 rounded-2xl bg-pedra-100 overflow-hidden flex-shrink-0">
                   {s.imagemUrl ? (
                     <img src={s.imagemUrl} alt={s.nomePet} className="w-full h-full object-cover" />
                   ) : (
@@ -65,7 +65,7 @@ export function MinhasSolicitacoesPage() {
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-display text-xl font-medium text-carbon-800">{s.nomePet}</h3>
                     {s.especie && (
-                      <Badge variant="areia">{especieLabel[s.especie]}</Badge>
+                      <Badge variant="pedra">{especieLabel[s.especie]}</Badge>
                     )}
                   </div>
                   <p className="font-body text-sm text-carbon-800/50">

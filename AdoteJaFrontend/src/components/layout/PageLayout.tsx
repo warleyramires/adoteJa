@@ -13,12 +13,12 @@ export function PageLayout({ children, fluid = false }: PageLayoutProps) {
       <main className={`flex-1 ${fluid ? '' : 'max-w-6xl mx-auto w-full px-6 py-10'}`}>
         {children}
       </main>
-      <footer className="border-t border-areia-200 py-8">
+      <footer className="border-t border-pedra-200 py-8">
         <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <span className="font-display text-lg font-medium text-carbon-800">
-            adote<span className="text-terracota-500">já</span>
+            adote<span className="text-ambar-500">já</span>
           </span>
-          <p className="font-body text-sm text-areia-400">
+          <p className="font-body text-sm text-pedra-400">
             © {new Date().getFullYear()} AdoteJá — Adoção responsável
           </p>
         </div>

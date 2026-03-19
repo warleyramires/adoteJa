@@ -66,9 +66,9 @@ export function CadastroPage() {
   return (
     <div className="min-h-screen bg-creme-100 flex">
       {/* Painel esquerdo — decorativo */}
-      <div className="hidden lg:flex lg:w-1/2 bg-terracota-500 flex-col justify-between p-16">
+      <div className="hidden lg:flex lg:w-1/2 bg-ambar-500 flex-col justify-between p-16">
         <Link to="/" className="font-display text-2xl font-medium text-creme-50">
-          adote<span className="text-floresta-200">já</span>
+          adote<span className="text-azul-200">já</span>
         </Link>
 
         {/* Steps indicator */}
@@ -79,14 +79,14 @@ export function CadastroPage() {
             return (
               <div key={s} className="flex items-center gap-4">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-body font-medium transition-all ${
-                  done    ? 'bg-creme-50 text-terracota-500' :
-                  active  ? 'bg-creme-50 text-terracota-500' :
-                            'border-2 border-terracota-300 text-terracota-200'
+                  done    ? 'bg-creme-50 text-ambar-500' :
+                  active  ? 'bg-creme-50 text-ambar-500' :
+                            'border-2 border-ambar-300 text-ambar-200'
                 }`}>
                   {done ? '✓' : i + 1}
                 </div>
                 <div>
-                  <p className={`font-body text-sm font-medium ${active || done ? 'text-creme-50' : 'text-terracota-200'}`}>
+                  <p className={`font-body text-sm font-medium ${active || done ? 'text-creme-50' : 'text-ambar-200'}`}>
                     {s === 'conta' ? 'Dados pessoais' : 'Endereço'}
                   </p>
                 </div>
@@ -95,7 +95,7 @@ export function CadastroPage() {
           })}
         </div>
 
-        <p className="font-body text-sm text-terracota-200">
+        <p className="font-body text-sm text-ambar-200">
           © {new Date().getFullYear()} AdoteJá
         </p>
       </div>
@@ -104,15 +104,15 @@ export function CadastroPage() {
       <div className="flex-1 flex flex-col justify-center px-6 py-12 lg:px-16 overflow-y-auto">
         <div className="w-full max-w-sm mx-auto">
           <Link to="/" className="lg:hidden block mb-10 font-display text-2xl font-medium text-carbon-800">
-            adote<span className="text-terracota-500">já</span>
+            adote<span className="text-ambar-500">já</span>
           </Link>
 
           {step === 'conta' ? (
             <>
-              <h1 className="font-display text-4xl font-light text-carbon-800 mb-2">Criar conta</h1>
+              <h1 className="font-display text-4xl font-normal text-carbon-800 mb-2">Criar conta</h1>
               <p className="font-body text-sm text-carbon-800/50 mb-8">
                 Já tem conta?{' '}
-                <Link to="/login" className="text-terracota-500 hover:underline">Entrar</Link>
+                <Link to="/login" className="text-ambar-500 hover:underline">Entrar</Link>
               </p>
 
               <form onSubmit={handleContaSubmit} className="flex flex-col gap-4">
@@ -132,11 +132,11 @@ export function CadastroPage() {
             <>
               <button
                 onClick={() => setStep('conta')}
-                className="flex items-center gap-1 font-body text-sm text-carbon-800/50 hover:text-terracota-500 mb-6 transition-colors"
+                className="flex items-center gap-1 font-body text-sm text-carbon-800/50 hover:text-ambar-500 mb-6 transition-colors"
               >
                 ← Voltar
               </button>
-              <h1 className="font-display text-4xl font-light text-carbon-800 mb-2">Endereço</h1>
+              <h1 className="font-display text-4xl font-normal text-carbon-800 mb-2">Endereço</h1>
               <p className="font-body text-sm text-carbon-800/50 mb-8">Quase lá! Informe seu endereço.</p>
 
               <form onSubmit={handleEnderecoSubmit} className="flex flex-col gap-4">

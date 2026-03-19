@@ -42,7 +42,7 @@ export function MinhaContaPage() {
       <PageLayout>
         <div className="animate-pulse space-y-4 max-w-md">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-12 bg-areia-200 rounded-2xl" />
+            <div key={i} className="h-12 bg-pedra-200 rounded-2xl" />
           ))}
         </div>
       </PageLayout>
@@ -53,7 +53,7 @@ export function MinhaContaPage() {
     return (
       <PageLayout>
         <div className="text-center py-24">
-          <p className="font-display text-3xl font-light text-carbon-800/30">
+          <p className="font-display text-3xl font-normal text-carbon-800/30">
             Não foi possível carregar seus dados
           </p>
         </div>
@@ -65,7 +65,7 @@ export function MinhaContaPage() {
     <PageLayout>
       <div className="mb-10">
         <p className="section-label mb-2">Configurações</p>
-        <h1 className="font-display text-5xl font-light text-carbon-800">Minha conta</h1>
+        <h1 className="font-display text-5xl font-normal text-carbon-800">Minha conta</h1>
       </div>
 
       <div className="max-w-md">

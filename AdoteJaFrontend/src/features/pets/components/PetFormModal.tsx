@@ -75,7 +75,7 @@ export function PetFormModal({ pet, onClose }: PetFormModalProps) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-6">
-          <h2 id="pet-modal-title" className="font-display text-3xl font-light text-carbon-800">
+          <h2 id="pet-modal-title" className="font-display text-3xl font-normal text-carbon-800">
             {isEditing ? 'Editar pet' : 'Novo pet'}
           </h2>
           <button aria-label="Fechar" onClick={onClose} className="font-body text-carbon-800/40 hover:text-carbon-800">&#x2715;</button>

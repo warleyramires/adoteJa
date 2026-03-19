@@ -17,7 +17,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display;
+    @apply font-display font-normal;
   }
 
   #root {
@@ -30,18 +30,18 @@
 @layer components {
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2
-           bg-terracota-500 text-creme-50 font-body font-medium
+           bg-ambar-500 text-creme-50 font-body font-medium
            px-6 py-3 rounded-full
            transition-all duration-200
-           hover:bg-terracota-600 hover:shadow-warm active:scale-95;
+           hover:bg-ambar-600 hover:shadow-warm active:scale-95;
   }
 
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2
-           bg-transparent text-terracota-500 font-body font-medium
-           px-6 py-3 rounded-full border border-terracota-300
+           bg-transparent text-ambar-500 font-body font-medium
+           px-6 py-3 rounded-full border border-ambar-300
            transition-all duration-200
-           hover:bg-terracota-50 active:scale-95;
+           hover:bg-ambar-50 active:scale-95;
   }
 
   .btn-ghost {
@@ -49,14 +49,14 @@
            bg-transparent text-carbon-800 font-body font-medium
            px-4 py-2 rounded-full
            transition-all duration-200
-           hover:bg-areia-100 active:scale-95;
+           hover:bg-pedra-100 active:scale-95;
   }
 
   .input-base {
-    @apply w-full bg-white border border-areia-300 rounded-2xl
-           px-4 py-3 font-body text-carbon-800 placeholder-areia-400
+    @apply w-full bg-white border border-pedra-300 rounded-2xl
+           px-4 py-3 font-body text-carbon-800 placeholder-pedra-400
            transition-all duration-200
-           focus:outline-none focus:ring-2 focus:ring-terracota-300 focus:border-terracota-400;
+           focus:outline-none focus:ring-2 focus:ring-ambar-300 focus:border-ambar-400;
   }
 
   .card {
@@ -64,6 +64,6 @@
   }
 
   .section-label {
-    @apply font-body text-xs font-medium uppercase tracking-widest text-terracota-500;
+    @apply font-body text-xs font-medium uppercase tracking-widest text-ambar-500;
   }
 }

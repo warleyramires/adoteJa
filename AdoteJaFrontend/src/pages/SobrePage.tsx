@@ -20,9 +20,9 @@ export function SobrePage() {
     <PageLayout>
       {/* Hero */}
       <div className="text-center mb-16">
-        <Badge variant="terracota" className="mb-4">Quem somos</Badge>
-        <h1 className="font-display text-5xl md:text-6xl font-light text-carbon-800 mb-6">
-          Sobre a <em className="text-terracota-500 not-italic">AdoteJá</em>
+        <Badge variant="ambar" className="mb-4">Quem somos</Badge>
+        <h1 className="font-display text-5xl md:text-6xl font-normal text-carbon-800 mb-6">
+          Sobre a <em className="text-ambar-500 not-italic">AdoteJá</em>
         </h1>
         <p className="font-body text-lg text-carbon-800/60 leading-relaxed max-w-2xl mx-auto">
           Somos uma plataforma dedicada a conectar animais que precisam de amor com famílias prontas
@@ -34,13 +34,13 @@ export function SobrePage() {
       {/* Como funciona */}
       <section className="mb-16">
         <p className="section-label text-center mb-2">Simples assim</p>
-        <h2 className="font-display text-3xl font-light text-carbon-800 text-center mb-10">
+        <h2 className="font-display text-3xl font-normal text-carbon-800 text-center mb-10">
           Como funciona a adoção
         </h2>
         <div className="grid md:grid-cols-3 gap-6">
           {steps.map((step) => (
             <div key={step.num} className="card p-8 text-center">
-              <span className="font-display text-5xl font-medium text-terracota-200 block mb-4">
+              <span className="font-display text-5xl font-medium text-ambar-200 block mb-4">
                 {step.num}
               </span>
               <h3 className="font-display text-xl font-medium text-carbon-800 mb-2">{step.title}</h3>
@@ -53,12 +53,12 @@ export function SobrePage() {
       {/* Valores */}
       <section className="mb-16">
         <p className="section-label text-center mb-2">Nossos pilares</p>
-        <h2 className="font-display text-3xl font-light text-carbon-800 text-center mb-10">
+        <h2 className="font-display text-3xl font-normal text-carbon-800 text-center mb-10">
           O que nos guia
         </h2>
         <div className="grid md:grid-cols-3 gap-6">
           {values.map((v) => (
-            <div key={v.title} className="bg-areia-50 rounded-3xl p-8 border border-areia-200">
+            <div key={v.title} className="bg-pedra-100 rounded-3xl p-8 border border-pedra-200">
               <h3 className="font-display text-xl font-medium text-carbon-800 mb-3">{v.title}</h3>
               <p className="font-body text-sm text-carbon-800/60 leading-relaxed">{v.desc}</p>
             </div>

@@ -31,20 +31,20 @@ export function LoginPage() {
   return (
     <div className="min-h-screen bg-creme-100 flex">
       {/* Painel esquerdo — decorativo */}
-      <div className="hidden lg:flex lg:w-1/2 bg-floresta-500 flex-col justify-between p-16">
+      <div className="hidden lg:flex lg:w-1/2 bg-azul-500 flex-col justify-between p-16">
         <Link to="/" className="font-display text-2xl font-medium text-creme-50">
-          adote<span className="text-terracota-300">já</span>
+          adote<span className="text-ambar-300">já</span>
         </Link>
         <div>
-          <h2 className="font-display text-5xl font-light text-creme-50 leading-tight mb-4">
+          <h2 className="font-display text-5xl font-normal text-creme-50 leading-tight mb-4">
             Bem-vindo de<br />
-            <em className="text-terracota-300 not-italic">volta</em>
+            <em className="text-ambar-300 not-italic">volta</em>
           </h2>
-          <p className="font-body text-base text-floresta-200 leading-relaxed">
+          <p className="font-body text-base text-azul-200 leading-relaxed">
             Entre na sua conta para gerenciar suas solicitações de adoção.
           </p>
         </div>
-        <p className="font-body text-sm text-floresta-300">
+        <p className="font-body text-sm text-azul-300">
           © {new Date().getFullYear()} AdoteJá
         </p>
       </div>
@@ -54,13 +54,13 @@ export function LoginPage() {
         <div className="w-full max-w-sm mx-auto">
           {/* Mobile logo */}
           <Link to="/" className="lg:hidden block mb-10 font-display text-2xl font-medium text-carbon-800">
-            adote<span className="text-terracota-500">já</span>
+            adote<span className="text-ambar-500">já</span>
           </Link>
 
-          <h1 className="font-display text-4xl font-light text-carbon-800 mb-2">Entrar</h1>
+          <h1 className="font-display text-4xl font-normal text-carbon-800 mb-2">Entrar</h1>
           <p className="font-body text-sm text-carbon-800/50 mb-8">
             Não tem conta?{' '}
-            <Link to="/cadastro" className="text-terracota-500 hover:underline">
+            <Link to="/cadastro" className="text-ambar-500 hover:underline">
               Cadastre-se
             </Link>
           </p>

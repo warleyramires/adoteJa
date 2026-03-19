@@ -22,7 +22,7 @@ export function PetDetailPage() {
     return (
       <PageLayout>
         <div className="text-center py-24">
-          <p className="font-display text-3xl font-light text-carbon-800/30 mb-4">Pet não encontrado</p>
+          <p className="font-display text-3xl font-normal text-carbon-800/30 mb-4">Pet não encontrado</p>
           <Link to="/pets">
             <Button variant="ghost">← Voltar para listagem</Button>
           </Link>
@@ -44,9 +44,9 @@ export function PetDetailPage() {
     return (
       <PageLayout>
         <div className="animate-pulse space-y-6">
-          <div className="h-96 bg-areia-200 rounded-3xl" />
-          <div className="h-8 bg-areia-200 rounded w-1/3" />
-          <div className="h-4 bg-areia-100 rounded w-2/3" />
+          <div className="h-96 bg-pedra-200 rounded-3xl" />
+          <div className="h-8 bg-pedra-200 rounded w-1/3" />
+          <div className="h-4 bg-pedra-100 rounded w-2/3" />
         </div>
       </PageLayout>
     )
@@ -56,7 +56,7 @@ export function PetDetailPage() {
     return (
       <PageLayout>
         <div className="text-center py-24">
-          <p className="font-display text-3xl font-light text-carbon-800/30 mb-4">Pet não encontrado</p>
+          <p className="font-display text-3xl font-normal text-carbon-800/30 mb-4">Pet não encontrado</p>
           <Link to="/pets">
             <Button variant="ghost">← Voltar para listagem</Button>
           </Link>
@@ -73,14 +73,14 @@ export function PetDetailPage() {
       {/* Breadcrumb */}
       <Link
         to="/pets"
-        className="inline-flex items-center gap-1 font-body text-sm text-carbon-800/50 hover:text-terracota-500 mb-8 transition-colors"
+        className="inline-flex items-center gap-1 font-body text-sm text-carbon-800/50 hover:text-ambar-500 mb-8 transition-colors"
       >
         ← Voltar para listagem
       </Link>
 
       <div className="grid lg:grid-cols-2 gap-12">
         {/* Foto */}
-        <div className="aspect-[4/3] bg-areia-100 rounded-3xl overflow-hidden">
+        <div className="aspect-[4/3] bg-pedra-100 rounded-3xl overflow-hidden">
           {pet.imagemUrl ? (
             <img src={pet.imagemUrl} alt={pet.nome} className="w-full h-full object-cover" />
           ) : (
@@ -92,9 +92,9 @@ export function PetDetailPage() {
         <div className="flex flex-col gap-6">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <h1 className="font-display text-5xl font-light text-carbon-800">{pet.nome}</h1>
+              <h1 className="font-display text-5xl font-normal text-carbon-800">{pet.nome}</h1>
               {pet.disponivel
-                ? <Badge variant="floresta">Disponível</Badge>
+                ? <Badge variant="azul">Disponível</Badge>
                 : <Badge variant="neutral">Indisponível</Badge>
               }
             </div>
@@ -102,9 +102,9 @@ export function PetDetailPage() {
             {/* Características */}
             {c && (
               <div className="flex flex-wrap gap-2 mt-3">
-                {c.especie && <Badge variant="areia">{especieLabel[c.especie]}</Badge>}
-                {c.porte   && <Badge variant="areia">{porteLabel[c.porte]}</Badge>}
-                {c.sexo    && <Badge variant="areia">{sexoLabel[c.sexo]}</Badge>}
+                {c.especie && <Badge variant="pedra">{especieLabel[c.especie]}</Badge>}
+                {c.porte   && <Badge variant="pedra">{porteLabel[c.porte]}</Badge>}
+                {c.sexo    && <Badge variant="pedra">{sexoLabel[c.sexo]}</Badge>}
                 {c.raca    && <Badge variant="neutral">{c.raca}</Badge>}
                 {c.cor     && <Badge variant="neutral">{c.cor}</Badge>}
               </div>
@@ -126,16 +126,16 @@ export function PetDetailPage() {
                   { label: 'Castrado',    value: s.castrado },
                   { label: 'Vermifugado', value: s.vermifugado },
                 ].map(({ label, value }) => (
-                  <div key={label} className="bg-creme-50 rounded-2xl p-3 text-center border border-areia-200">
+                  <div key={label} className="bg-creme-50 rounded-2xl p-3 text-center border border-pedra-200">
                     <span className="block text-2xl mb-1">{value === true ? '✓' : value === false ? '✗' : '—'}</span>
                     <span className={`font-body text-xs font-medium ${
-                      value === true ? 'text-floresta-600' : value === false ? 'text-red-500' : 'text-carbon-800/40'
+                      value === true ? 'text-azul-600' : value === false ? 'text-red-500' : 'text-carbon-800/40'
                     }`}>{label}</span>
                   </div>
                 ))}
               </div>
               {s.historicoSaude && (
-                <p className="font-body text-sm text-carbon-800/60 mt-3 bg-areia-50 rounded-2xl px-4 py-3">
+                <p className="font-body text-sm text-carbon-800/60 mt-3 bg-pedra-100 rounded-2xl px-4 py-3">
                   {s.historicoSaude}
                 </p>
               )}
@@ -144,7 +144,7 @@ export function PetDetailPage() {
 
           {/* CTA */}
           {pet.disponivel && (
-            <div className="mt-auto pt-4 border-t border-areia-200">
+            <div className="mt-auto pt-4 border-t border-pedra-200">
               {isAuthenticated ? (
                 <Button
                   className="w-full"

@@ -66,7 +66,7 @@ export function AdminFuncionariosPage() {
       <div className="flex items-center justify-between mb-10">
         <div>
           <p className="section-label mb-2">Painel</p>
-          <h1 className="font-display text-5xl font-light text-carbon-800">Funcionários</h1>
+          <h1 className="font-display text-5xl font-normal text-carbon-800">Funcionários</h1>
         </div>
         <Button onClick={showForm ? handleCancel : () => setShowForm(true)}>
           {showForm ? 'Cancelar' : '+ Novo funcionário'}
@@ -75,7 +75,7 @@ export function AdminFuncionariosPage() {
 
       {showForm && (
         <form onSubmit={handleSubmit} className="card p-6 mb-8 max-w-lg flex flex-col gap-4">
-          <h2 className="font-display text-2xl font-light text-carbon-800">Novo funcionário</h2>
+          <h2 className="font-display text-2xl font-normal text-carbon-800">Novo funcionário</h2>
 
           <Input label="Nome" value={form.nome} onChange={set('nome')} required />
           <Input label="E-mail" type="email" value={form.email} onChange={set('email')} required />
@@ -124,18 +124,18 @@ export function AdminFuncionariosPage() {
         </div>
       ) : isError ? (
         <div className="text-center py-24">
-          <p className="font-display text-3xl font-light text-carbon-800/30">Erro ao carregar funcionários.</p>
+          <p className="font-display text-3xl font-normal text-carbon-800/30">Erro ao carregar funcionários.</p>
         </div>
       ) : (funcionarios ?? []).length === 0 ? (
         <div className="text-center py-24">
-          <p className="font-display text-3xl font-light text-carbon-800/30">Nenhum funcionário cadastrado.</p>
+          <p className="font-display text-3xl font-normal text-carbon-800/30">Nenhum funcionário cadastrado.</p>
         </div>
       ) : (
         <div className="space-y-3">
           {(funcionarios ?? []).map((f) => (
             <div key={f.id} className="card p-4 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-terracota-100 flex items-center justify-center">
-                <span className="font-display text-lg font-medium text-terracota-500">
+              <div className="w-10 h-10 rounded-full bg-ambar-100 flex items-center justify-center">
+                <span className="font-display text-lg font-medium text-ambar-500">
                   {f.nome.charAt(0).toUpperCase() || '?'}
                 </span>
               </div>
