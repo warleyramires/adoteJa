@@ -32,6 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 
-### Arquivos de configuração de perfil de desenvolvimento
-application-dev.properties
+# Arquivo de configuração local
+src/main/resources/application-*.properties
 

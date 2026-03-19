@@ -1,0 +1,39 @@
+package com.adotejabackend.AdoteJaBackend.controllers;
+
+import com.adotejabackend.AdoteJaBackend.dtos.CreateUsuarioDTO;
+import com.adotejabackend.AdoteJaBackend.dtos.LoginUsuarioDTO;
+import com.adotejabackend.AdoteJaBackend.dtos.MeResponseDTO;
+import com.adotejabackend.AdoteJaBackend.dtos.RecoveryJwtTokenDTO;
+import com.adotejabackend.AdoteJaBackend.services.UsuarioService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/users")
+public class UsuarioController {
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @PostMapping("/login")
+    public ResponseEntity<RecoveryJwtTokenDTO> authenticate(@Valid @RequestBody LoginUsuarioDTO loginUsuarioDTO){
+        RecoveryJwtTokenDTO token = usuarioService.authenticateUsuario(loginUsuarioDTO);
+        return new ResponseEntity<>(token, HttpStatus.OK);
+    }
+
+    @PostMapping()
+    public ResponseEntity<Void> createUsuarioCustomer(
+                                @Valid @RequestBody CreateUsuarioDTO createUsuarioDTO){
+        usuarioService.createUsuario(createUsuarioDTO);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    @GetMapping("/me")
+    public ResponseEntity<MeResponseDTO> me(Authentication authentication) {
+        return ResponseEntity.ok(usuarioService.getMe(authentication.getName()));
+    }
+
+}

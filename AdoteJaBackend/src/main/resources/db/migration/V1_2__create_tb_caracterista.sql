@@ -1,0 +1,8 @@
+CREATE TABLE tb_caracteristica (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    raca VARCHAR(255),
+    cor VARCHAR(255),
+    especie ENUM('CACHORRO', 'GATO', 'OUTRO') NOT NULL,
+    porte ENUM('PEQUENO', 'MEDIO', 'GRANDE') NOT NULL,
+    sexo ENUM('MACHO', 'FEMEA') NOT NULL
+);
