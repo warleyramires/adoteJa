@@ -87,10 +87,6 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.PUT, "/solicitacoes/**").hasAnyRole("MEMBER", "ADMINISTRATOR")
                         // Usuário autenticado
                         .requestMatchers(HttpMethod.GET, "/users/me").authenticated()
-                        // Testes
-                        .requestMatchers("/users/test").authenticated()
-                        .requestMatchers("/users/test/customer").hasRole("CUSTOMER")
-                        .requestMatchers("/users/test/administrator").hasRole("ADMINISTRATOR")
                         .anyRequest().denyAll()
                 )
                 .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -112,7 +108,7 @@ public class SecurityConfiguration {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
+        config.setAllowedHeaders(List.of("Content-Type", "Authorization"));
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
