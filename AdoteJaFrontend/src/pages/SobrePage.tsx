@@ -1,7 +1,7 @@
-import { PageLayout } from '../components/layout/PageLayout'
-import { Badge } from '../components/ui/Badge'
 import { Link } from 'react-router-dom'
+import { PageLayout } from '../components/layout/PageLayout'
 import { Button } from '../components/ui/Button'
+import { Badge } from '../components/ui/Badge'
 
 const steps = [
   { num: '01', title: 'Cadastre-se', desc: 'Crie sua conta gratuitamente em menos de 2 minutos.' },
