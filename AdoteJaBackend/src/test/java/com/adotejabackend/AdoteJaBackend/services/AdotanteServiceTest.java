@@ -96,6 +96,17 @@ class AdotanteServiceTest {
     }
 
     @Test
+    void findById_semAutenticacao_lancaAccessDeniedException() {
+        // No auth set — SecurityContextHolder returns null authentication
+        SecurityContextHolder.clearContext();
+        when(adotanteRepository.findById(1L))
+                .thenReturn(Optional.of(adotanteComEmail(1L, "dono@email.com")));
+
+        assertThatThrownBy(() -> adotanteService.findById(1L))
+                .isInstanceOf(AccessDeniedException.class);
+    }
+
+    @Test
     void update_outroUsuario_lancaAccessDeniedException() {
         mockAuth("invasor@email.com", "ROLE_CUSTOMER");
         when(adotanteRepository.findById(1L))

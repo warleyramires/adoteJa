@@ -95,9 +95,12 @@ public class AdotanteService {
 
     private void verifyOwnership(Adotante adotante) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated()) {
+            throw new AccessDeniedException("Acesso negado.");
+        }
         boolean isPrivileged = auth.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_MEMBER")
-                           || a.getAuthority().equals("ROLE_ADMINISTRATOR"));
+                .anyMatch(a -> a.getAuthority().equals(RoleName.ROLE_MEMBER.name())
+                           || a.getAuthority().equals(RoleName.ROLE_ADMINISTRATOR.name()));
         if (isPrivileged) return;
         if (!adotante.getEmail().equals(auth.getName())) {
             throw new AccessDeniedException("Acesso negado.");
