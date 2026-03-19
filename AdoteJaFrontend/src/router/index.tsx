@@ -9,6 +9,7 @@ import { MinhaContaPage } from '../pages/MinhaContaPage'
 import { AdminPetsPage } from '../pages/admin/AdminPetsPage'
 import { AdminSolicitacoesPage } from '../pages/admin/AdminSolicitacoesPage'
 import { AdminFuncionariosPage } from '../pages/admin/AdminFuncionariosPage'
+import { SobrePage } from '../pages/SobrePage'
 import { NotFoundPage } from '../pages/NotFoundPage'
 import { PrivateRoute, AdminRoute } from './PrivateRoute'
 
@@ -18,6 +19,7 @@ export const router = createBrowserRouter([
   { path: '/cadastro', element: <CadastroPage /> },
   { path: '/pets',     element: <PetsPage /> },
   { path: '/pets/:id', element: <PetDetailPage /> },
+  { path: '/sobre', element: <SobrePage /> },
 
   // Rotas que exigem login (qualquer usuário autenticado)
   {
