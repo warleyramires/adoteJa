@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { PageLayout } from '../components/layout/PageLayout'
 import { Button } from '../components/ui/Button'
 import { Badge } from '../components/ui/Badge'
+import { useAuthContext } from '../contexts/AuthContext'
 
 const stats = [
   { value: '2.4k', label: 'animais adotados' },
@@ -16,6 +17,8 @@ const species = [
 ]
 
 export function HomePage() {
+  const { isAuthenticated } = useAuthContext()
+
   return (
     <PageLayout fluid>
       {/* ── Hero ─────────────────────────────────────────────────────── */}
@@ -44,9 +47,11 @@ export function HomePage() {
               <Link to="/pets">
                 <Button size="lg">Ver animais disponíveis</Button>
               </Link>
-              <Link to="/cadastro">
-                <Button variant="secondary" size="lg">Quero adotar</Button>
-              </Link>
+              {!isAuthenticated && (
+                <Link to="/cadastro">
+                  <Button variant="secondary" size="lg">Quero adotar</Button>
+                </Link>
+              )}
             </div>
           </div>
 
@@ -111,11 +116,13 @@ export function HomePage() {
           <p className="font-body text-base text-floresta-200 mb-10 max-w-lg mx-auto">
             Cadastre-se gratuitamente e comece o processo de adoção. É simples, rápido e transforma vidas.
           </p>
-          <Link to="/cadastro">
-            <Button className="bg-creme-50 !text-floresta-500 hover:bg-creme-100 hover:!text-floresta-600" size="lg">
-              Criar minha conta
-            </Button>
-          </Link>
+          {!isAuthenticated && (
+            <Link to="/cadastro">
+              <Button className="bg-creme-50 !text-floresta-500 hover:bg-creme-100 hover:!text-floresta-600" size="lg">
+                Criar minha conta
+              </Button>
+            </Link>
+          )}
         </div>
       </section>
     </PageLayout>
