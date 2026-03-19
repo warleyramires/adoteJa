@@ -166,4 +166,19 @@ class PetServiceTest {
                 .isInstanceOf(EntityNotFoundException.class);
         verify(petRepository, never()).deleteById(any());
     }
+
+    @Test
+    void create_imagemMaiorQue5MB_lancaIllegalArgumentException() {
+        MultipartFile imagem = mock(MultipartFile.class);
+        when(imagem.isEmpty()).thenReturn(false);
+        when(imagem.getSize()).thenReturn(6L * 1024 * 1024); // 6 MB
+
+        CreatePetDTO dto = new CreatePetDTO("Rex", null,
+                new SaudeDTO(true, true, true, null),
+                new CaracteristicaDTO(null, null, Especie.CAO, Porte.MEDIO, Sexo.MACHO));
+
+        assertThatThrownBy(() -> petService.create(dto, imagem))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("5 MB");
+    }
 }

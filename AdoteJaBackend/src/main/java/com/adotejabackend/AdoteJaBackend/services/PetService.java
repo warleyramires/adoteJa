@@ -20,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class PetService {
 
+    private static final long MAX_FILE_SIZE = 5L * 1024 * 1024; // 5 MB
+
     @Autowired
     private PetRepository petRepository;
 
@@ -91,6 +93,9 @@ public class PetService {
 
     private String uploadIfPresent(MultipartFile imagem) {
         if (imagem == null || imagem.isEmpty()) return null;
+        if (imagem.getSize() > MAX_FILE_SIZE) {
+            throw new IllegalArgumentException("Arquivo excede o tamanho máximo de 5 MB.");
+        }
         String contentType = imagem.getContentType();
         if (contentType == null || !contentType.startsWith("image/")) {
             throw new IllegalArgumentException("Tipo de arquivo inválido: apenas imagens são aceitas.");
