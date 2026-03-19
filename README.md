@@ -82,8 +82,37 @@ docker run -p 80:80 adoteja-frontend
 
 ## Padrão de commits
 
+Cada commit deve seguir a estrutura:
+
 ```
 <tipo>(<escopo>): <mensagem>
 ```
 
-Tipos: `feat`, `fix`, `refactor`, `docs`, `style`, `test`, `perf`, `ci`, `build`, `chore`
+- **`<tipo>`** → O que foi feito no código
+- **`<escopo>`** → Parte do sistema afetada (opcional, mas recomendado)
+- **`<mensagem>`** → Descrição breve e clara da mudança
+
+### Tipos
+
+| Tipo | Descrição |
+|------|-----------|
+| `feat` | Adição de nova funcionalidade |
+| `fix` | Correção de bug |
+| `refactor` | Refatoração sem mudança de funcionalidade |
+| `docs` | Atualizações na documentação |
+| `style` | Ajustes visuais ou formatação de código |
+| `test` | Adição ou modificação de testes |
+| `perf` | Melhorias de performance |
+| `ci` | Ajustes em CI/CD |
+| `build` | Alterações na build (ex: dependências) |
+| `chore` | Alterações menores (ex: configurações) |
+
+### Exemplos
+
+```bash
+feat(usuário): adicionar endpoint para cadastro de adotantes
+fix(visita): corrigir erro ao agendar visita para múltiplos pets
+refactor(pet): melhorar a lógica de busca por pets disponíveis
+test(pet): criar testes unitários para serviço de listagem de pets
+chore: adicionar application-dev.properties no .gitignore
+```
