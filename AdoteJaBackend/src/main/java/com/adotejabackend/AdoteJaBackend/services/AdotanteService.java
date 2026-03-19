@@ -14,6 +14,9 @@ import com.adotejabackend.AdoteJaBackend.repositories.RoleRepository;
 import com.adotejabackend.AdoteJaBackend.repositories.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,14 +62,17 @@ public class AdotanteService {
     }
 
     public RecoveryAdotanteDTO findById(Long id) {
-        return toRecoveryDTO(adotanteRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Adotante não encontrado: " + id)));
+        Adotante adotante = adotanteRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Adotante não encontrado: " + id));
+        verifyOwnership(adotante);
+        return toRecoveryDTO(adotante);
     }
 
     @Transactional
     public RecoveryAdotanteDTO update(Long id, UpdateAdotanteDTO dto) {
         Adotante adotante = adotanteRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Adotante não encontrado: " + id));
+        verifyOwnership(adotante);
 
         if (dto.nome() != null) adotante.setNome(dto.nome());
         if (dto.telefone1() != null) adotante.setTelefone1(dto.telefone1());
@@ -85,6 +91,17 @@ public class AdotanteService {
         }
 
         return toRecoveryDTO(adotanteRepository.save(adotante));
+    }
+
+    private void verifyOwnership(Adotante adotante) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        boolean isPrivileged = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_MEMBER")
+                           || a.getAuthority().equals("ROLE_ADMINISTRATOR"));
+        if (isPrivileged) return;
+        if (!adotante.getEmail().equals(auth.getName())) {
+            throw new AccessDeniedException("Acesso negado.");
+        }
     }
 
     private Endereco toEnderecoEntity(EnderecoDTO dto) {
