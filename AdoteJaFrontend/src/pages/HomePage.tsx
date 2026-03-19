@@ -1,14 +1,17 @@
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { PageLayout } from '../components/layout/PageLayout'
 import { Button } from '../components/ui/Button'
 import { Badge } from '../components/ui/Badge'
 import { useAuthContext } from '../contexts/AuthContext'
 
-const stats = [
-  { value: '2.4k', label: 'animais adotados' },
-  { value: '180+', label: 'parceiros ativos' },
-  { value: '98%', label: 'satisfação' },
-]
+import img1 from '../assets/andrew-s-ouo1hbizWwo-unsplash.jpg'
+import img2 from '../assets/veronika-jorjobert-27w3ULIIJfI-unsplash.jpg'
+import img3 from '../assets/alvan-nee-T-0EW-SEbsE-unsplash.jpg'
+import img4 from '../assets/mia-anderson-2k6v10Y2dIg-unsplash.jpg'
+import img5 from '../assets/sebastian-coman-travel-Kt5tyYM_uas-unsplash.jpg'
+
+const carouselImages = [img1, img2, img3, img4, img5]
 
 const species = [
   { label: 'Cães', emoji: '🐕', href: '/pets?especie=CAO', color: 'bg-terracota-100' },
@@ -18,6 +21,25 @@ const species = [
 
 export function HomePage() {
   const { isAuthenticated } = useAuthContext()
+  const [current, setCurrent] = useState(0)
+  const [visible, setVisible] = useState(true)
+  const hoveredRef = useRef(false)
+  const total = carouselImages.length
+
+  function goTo(index: number) {
+    setVisible(false)
+    setTimeout(() => {
+      setCurrent((index + total) % total)
+      setVisible(true)
+    }, 300)
+  }
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!hoveredRef.current) goTo(current + 1)
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [current])
 
   return (
     <PageLayout fluid>
@@ -55,22 +77,49 @@ export function HomePage() {
             </div>
           </div>
 
-          {/* Stats card */}
-          <div className="animate-fade-up" style={{ animationDelay: '150ms' }}>
-            <div className="card p-8 bg-white">
-              <p className="section-label mb-6">Nosso impacto</p>
-              <div className="grid grid-cols-3 gap-6">
-                {stats.map((stat) => (
-                  <div key={stat.label} className="text-center">
-                    <p className="font-display text-4xl font-medium text-terracota-500 mb-1">
-                      {stat.value}
-                    </p>
-                    <p className="font-body text-xs text-carbon-800/50 leading-tight">
-                      {stat.label}
-                    </p>
-                  </div>
-                ))}
-              </div>
+          {/* Carousel */}
+          <div
+            className="animate-fade-up relative aspect-[4/3] rounded-3xl overflow-hidden"
+            style={{ animationDelay: '150ms' }}
+            onMouseEnter={() => { hoveredRef.current = true }}
+            onMouseLeave={() => { hoveredRef.current = false }}
+          >
+            <img
+              src={carouselImages[current]}
+              alt={`Pet ${current + 1}`}
+              className={`w-full h-full object-cover transition-opacity duration-300 ${visible ? 'opacity-100' : 'opacity-0'}`}
+            />
+
+            {/* Left arrow */}
+            <button
+              onClick={() => goTo(current - 1)}
+              aria-label="Imagem anterior"
+              className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white rounded-full w-9 h-9 flex items-center justify-center text-carbon-800 transition-colors"
+            >
+              ←
+            </button>
+
+            {/* Right arrow */}
+            <button
+              onClick={() => goTo(current + 1)}
+              aria-label="Próxima imagem"
+              className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white rounded-full w-9 h-9 flex items-center justify-center text-carbon-800 transition-colors"
+            >
+              →
+            </button>
+
+            {/* Dots */}
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+              {carouselImages.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => goTo(i)}
+                  aria-label={`Ir para imagem ${i + 1}`}
+                  className={`w-2 h-2 rounded-full transition-colors ${
+                    i === current ? 'bg-white' : 'bg-white/40'
+                  }`}
+                />
+              ))}
             </div>
           </div>
         </div>
