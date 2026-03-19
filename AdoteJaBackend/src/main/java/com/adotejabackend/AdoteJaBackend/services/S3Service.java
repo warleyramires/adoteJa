@@ -29,7 +29,7 @@ public class S3Service {
         this.s3Client = s3Client;
     }
 
-    public String uploadFile(MultipartFile file, String folder) throws IOException {
+    public String uploadFile(MultipartFile file, String folder) {
         String originalFilename = file.getOriginalFilename();
         String extension = originalFilename != null && originalFilename.contains(".")
                 ? originalFilename.substring(originalFilename.lastIndexOf("."))
@@ -43,7 +43,11 @@ public class S3Service {
                 .acl(ObjectCannedACL.PUBLIC_READ)
                 .build();
 
-        s3Client.putObject(request, RequestBody.fromBytes(file.getBytes()));
+        try {
+            s3Client.putObject(request, RequestBody.fromBytes(file.getBytes()));
+        } catch (IOException e) {
+            throw new RuntimeException("Falha ao ler bytes do arquivo: " + e.getMessage(), e);
+        }
 
         return buildFileUrl(key);
     }

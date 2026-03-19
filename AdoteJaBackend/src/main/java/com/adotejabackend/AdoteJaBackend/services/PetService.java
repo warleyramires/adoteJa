@@ -16,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 
 @Service
 public class PetService {
@@ -96,11 +95,7 @@ public class PetService {
         if (contentType == null || !contentType.startsWith("image/")) {
             throw new IllegalArgumentException("Tipo de arquivo inválido: apenas imagens são aceitas.");
         }
-        try {
-            return s3Service.uploadFile(imagem, "pets");
-        } catch (IOException e) {
-            throw new RuntimeException("Falha ao fazer upload da imagem: " + e.getMessage(), e);
-        }
+        return s3Service.uploadFile(imagem, "pets");
     }
 
     private Saude toSaudeEntity(SaudeDTO dto) {
