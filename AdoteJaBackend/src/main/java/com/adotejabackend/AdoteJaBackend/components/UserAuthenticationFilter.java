@@ -45,7 +45,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (JWTVerificationException | UsernameNotFoundException ex) {
-                sendUnauthorized(response, ex.getMessage());
+                sendUnauthorized(response, "Token inválido ou expirado.");
                 return;
             }
         }
