@@ -30,6 +30,9 @@ public class SolicitacaoService {
     @Autowired
     private PetRepository petRepository;
 
+    @Autowired
+    private AuditService auditService;
+
     public RecoverySolicitacaoDTO create(CreateSolicitacaoDTO dto) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -69,6 +72,8 @@ public class SolicitacaoService {
         Solicitacao solicitacao = solicitacaoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Solicitação não encontrada: " + id));
 
+        String emailResponsavel = SecurityContextHolder.getContext().getAuthentication().getName();
+
         solicitacao.setStatus(dto.status());
         solicitacao.setDataResposta(LocalDateTime.now());
         if (dto.observacao() != null) solicitacao.setObservacao(dto.observacao());
@@ -78,7 +83,10 @@ public class SolicitacaoService {
             petRepository.save(solicitacao.getPet());
         }
 
-        return toRecoveryDTO(solicitacaoRepository.save(solicitacao));
+        RecoverySolicitacaoDTO result = toRecoveryDTO(solicitacaoRepository.save(solicitacao));
+        auditService.log("STATUS_CHANGE", emailResponsavel,
+                "Solicitação #" + id + " alterada para " + dto.status());
+        return result;
     }
 
     private RecoverySolicitacaoDTO toRecoveryDTO(Solicitacao s) {
