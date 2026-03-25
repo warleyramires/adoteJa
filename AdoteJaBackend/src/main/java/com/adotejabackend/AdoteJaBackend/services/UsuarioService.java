@@ -2,6 +2,7 @@ package com.adotejabackend.AdoteJaBackend.services;
 
 import com.adotejabackend.AdoteJaBackend.config.SecurityConfiguration;
 import com.adotejabackend.AdoteJaBackend.dtos.CreateUsuarioDTO;
+import com.adotejabackend.AdoteJaBackend.exceptions.RegistrationException;
 import com.adotejabackend.AdoteJaBackend.dtos.EnderecoDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.LoginUsuarioDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.MeResponseDTO;
@@ -40,12 +41,16 @@ public class UsuarioService {
     @Autowired
     private SecurityConfiguration securityConfiguration;
 
+    @Autowired
+    private AuditService auditService;
+
     public RecoveryJwtTokenDTO authenticateUsuario(LoginUsuarioDTO loginUsuarioDTO) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(loginUsuarioDTO.email(), loginUsuarioDTO.password());
         Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
         UsuarioDetailsImpl usuarioDetails = (UsuarioDetailsImpl) authentication.getPrincipal();
+        auditService.log("LOGIN", loginUsuarioDTO.email(), "Login realizado com sucesso");
 
         return new RecoveryJwtTokenDTO(jwtTokenService.generateToken(usuarioDetails));
     }
@@ -55,7 +60,7 @@ public class UsuarioService {
         Optional<Usuario> usuario = usuarioRepository.findByEmail(createUsuarioDTO.email());
 
         if (usuario.isPresent()) {
-            throw new RuntimeException("E-mail já cadastrado.");
+            throw new RegistrationException("E-mail já cadastrado.");
         }
 
         Endereco endereco = convertEnderecoDTOToEntity(createUsuarioDTO.enderecoDTO());
@@ -73,6 +78,7 @@ public class UsuarioService {
 
         endereco.setUsuario(newUsuario);
         usuarioRepository.save(newUsuario);
+        auditService.log("REGISTER", createUsuarioDTO.email(), "Usuário cadastrado");
     }
 
     public MeResponseDTO getMe(String email) {

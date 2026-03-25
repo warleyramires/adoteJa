@@ -1,6 +1,7 @@
 package com.adotejabackend.AdoteJaBackend.config;
 
 import com.adotejabackend.AdoteJaBackend.dtos.ErrorResponseDTO;
+import com.adotejabackend.AdoteJaBackend.exceptions.RegistrationException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponseDTO> handleIllegalArgument(IllegalArgumentException ex) {
         return build(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(RegistrationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleRegistration(RegistrationException ex) {
+        log.warn("Registration failed: {}", ex.getMessage());
+        return build(HttpStatus.CONFLICT, "Não foi possível completar o cadastro.");
     }
 
     @ExceptionHandler(AccessDeniedException.class)
