@@ -34,6 +34,7 @@ class AdotanteServiceTest {
     @Mock private UsuarioRepository usuarioRepository;
     @Mock private RoleRepository roleRepository;
     @Mock private SecurityConfiguration securityConfiguration;
+    @Mock private AuditService auditService;
 
     @AfterEach
     void tearDown() {

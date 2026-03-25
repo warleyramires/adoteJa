@@ -30,6 +30,8 @@ import org.mockito.ArgumentCaptor;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,6 +40,7 @@ class SolicitacaoServiceTest {
     @Mock private SolicitacaoRepository solicitacaoRepository;
     @Mock private AdotanteRepository adotanteRepository;
     @Mock private PetRepository petRepository;
+    @Mock private AuditService auditService;
 
     @InjectMocks
     private SolicitacaoService solicitacaoService;
@@ -150,5 +153,16 @@ class SolicitacaoServiceTest {
         assertThatThrownBy(() -> solicitacaoService.updateStatus(999L,
                 new UpdateStatusSolicitacaoDTO(StatusSolicitacao.APROVADO, null)))
                 .isInstanceOf(EntityNotFoundException.class);
+    }
+
+    @Test
+    void updateStatus_registraAuditLog() {
+        when(solicitacaoRepository.findById(100L)).thenReturn(Optional.of(solicitacao));
+        when(solicitacaoRepository.save(any(Solicitacao.class))).thenReturn(solicitacao);
+
+        solicitacaoService.updateStatus(100L, new UpdateStatusSolicitacaoDTO(StatusSolicitacao.APROVADO, null));
+
+        verify(auditService).log(eq("STATUS_CHANGE"), eq("adotante@test.com"),
+                contains("Solicitação #100"));
     }
 }
