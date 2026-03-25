@@ -12,12 +12,19 @@
   }
 
   body {
-    @apply bg-creme-100 font-body text-carbon-800 antialiased;
+    @apply bg-surface font-body text-on-surface antialiased;
     margin: 0;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display font-normal;
+    @apply font-headline;
+  }
+
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
   }
 
   #root {
@@ -30,40 +37,40 @@
 @layer components {
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2
-           bg-ambar-500 text-creme-50 font-body font-medium
-           px-6 py-3 rounded-full
-           transition-all duration-200
-           hover:bg-ambar-600 hover:shadow-warm active:scale-95;
+           bg-gradient-to-r from-primary to-primary-container text-on-primary font-body font-bold
+           px-8 py-4 rounded-full
+           shadow-warm transition-all duration-200
+           hover:opacity-90 hover:scale-[1.02] active:scale-95;
   }
 
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2
-           bg-transparent text-ambar-500 font-body font-medium
-           px-6 py-3 rounded-full border border-ambar-300
+           bg-secondary-fixed text-on-secondary-fixed font-body font-semibold
+           px-8 py-4 rounded-full
            transition-all duration-200
-           hover:bg-ambar-50 active:scale-95;
+           hover:bg-secondary-container active:scale-95;
   }
 
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2
-           bg-transparent text-carbon-800 font-body font-medium
+           bg-transparent text-on-surface font-body font-medium
            px-4 py-2 rounded-full
            transition-all duration-200
-           hover:bg-pedra-100 active:scale-95;
+           hover:bg-surface-container active:scale-95;
   }
 
   .input-base {
-    @apply w-full bg-white border border-pedra-300 rounded-2xl
-           px-4 py-3 font-body text-carbon-800 placeholder-pedra-400
+    @apply w-full bg-surface-container-highest border-none rounded
+           px-5 py-4 font-body text-on-surface
            transition-all duration-200
-           focus:outline-none focus:ring-2 focus:ring-ambar-300 focus:border-ambar-400;
+           focus:outline-none focus:ring-2 focus:ring-primary/30;
   }
 
   .card {
-    @apply bg-white rounded-3xl shadow-card overflow-hidden;
+    @apply bg-surface-container-lowest rounded-lg shadow-editorial overflow-hidden;
   }
 
   .section-label {
-    @apply font-body text-xs font-medium uppercase tracking-widest text-ambar-500;
+    @apply font-body text-xs font-semibold uppercase tracking-widest text-secondary;
   }
 }

@@ -13,18 +13,18 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="flex flex-col gap-1.5">
         {label && (
-          <label htmlFor={inputId} className="font-body text-sm font-medium text-carbon-800">
+          <label htmlFor={inputId} className="font-body text-sm font-semibold text-on-surface-variant ml-1">
             {label}
           </label>
         )}
         <input
           ref={ref}
           id={inputId}
-          className={cn('input-base', error && 'border-red-400 focus:ring-red-300', className)}
+          className={cn('input-base', error && 'ring-2 ring-error/40', className)}
           {...props}
         />
         {error && (
-          <p className="font-body text-xs text-red-500">{error}</p>
+          <p className="font-body text-xs text-error ml-1">{error}</p>
         )}
       </div>
     )

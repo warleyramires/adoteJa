@@ -26,14 +26,14 @@ export function AdminSolicitacoesPage() {
   const { showToast } = useToast()
   const [pendingId, setPendingId] = useState<number | null>(null)
 
+  const total   = solicitacoes?.length ?? 0
+  const pending = solicitacoes?.filter((s) => s.status === 'PENDENTE').length ?? 0
+
   async function changeStatus(id: number, status: StatusSolicitacao) {
     setPendingId(id)
     try {
       await updateMutation.mutateAsync({ id, data: { status } })
-      showToast(
-        status === 'APROVADA' ? 'Solicitação aprovada.' : 'Solicitação recusada.',
-        'success'
-      )
+      showToast(status === 'APROVADA' ? 'Solicitação aprovada.' : 'Solicitação recusada.', 'success')
     } catch (err) {
       showToast(getApiError(err).message, 'error')
     } finally {
@@ -43,76 +43,93 @@ export function AdminSolicitacoesPage() {
 
   return (
     <PageLayout>
-      <div className="mb-10">
-        <p className="section-label mb-2">Painel</p>
-        <h1 className="font-display text-5xl font-normal text-carbon-800">Solicitações</h1>
-      </div>
+      {/* Header assimétrico */}
+      <header className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 items-end">
+        <div className="lg:col-span-7">
+          <span className="section-label mb-3 block">Administração</span>
+          <h1 className="font-headline text-5xl font-extrabold text-on-surface tracking-tight leading-tight">
+            Gerenciar <br />Solicitações
+          </h1>
+          <p className="mt-4 text-on-surface-variant font-body text-lg max-w-xl leading-relaxed">
+            Revise as solicitações de adoção recebidas e atualize os status.
+          </p>
+        </div>
+        {!isLoading && (
+          <div className="lg:col-span-5 grid grid-cols-2 gap-4">
+            <div className="bg-surface-container-lowest p-6 rounded-lg shadow-editorial">
+              <span className="block font-headline text-3xl font-bold text-primary">{pending}</span>
+              <span className="font-body text-sm text-on-surface-variant">Aguardando revisão</span>
+            </div>
+            <div className="bg-primary-fixed p-6 rounded-lg shadow-editorial">
+              <span className="block font-headline text-3xl font-bold text-on-primary-fixed">{total}</span>
+              <span className="font-body text-sm text-on-primary-fixed-variant">Total de solicitações</span>
+            </div>
+          </div>
+        )}
+      </header>
 
+      {/* Lista */}
       {isLoading ? (
         <div className="space-y-4">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="card animate-pulse h-28" />
+            <div key={i} className="bg-surface-container-lowest rounded-lg h-24 animate-pulse" />
           ))}
         </div>
       ) : isError ? (
         <div className="text-center py-24">
-          <p className="font-display text-3xl font-normal text-carbon-800/30">
-            Erro ao carregar solicitações
-          </p>
+          <p className="font-headline text-3xl font-bold text-on-surface/30">Erro ao carregar solicitações</p>
         </div>
       ) : solicitacoes?.length === 0 ? (
         <div className="text-center py-24">
-          <p className="font-display text-3xl font-normal text-carbon-800/30">Nenhuma solicitação encontrada</p>
+          <p className="font-headline text-3xl font-bold text-on-surface/30">Nenhuma solicitação encontrada</p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-5">
           {(solicitacoes ?? []).map((s) => (
-            <div key={s.id} className="card p-5 flex items-center gap-5">
-              {/* Foto */}
-              <div className="w-16 h-16 rounded-2xl bg-pedra-100 overflow-hidden flex-shrink-0">
-                {s.imagemUrl
-                  ? <img src={s.imagemUrl} alt={s.nomePet} className="w-full h-full object-cover" />
-                  : <div className="w-full h-full flex items-center justify-center text-2xl">🐾</div>
-                }
+            <div key={s.id}
+              className="group bg-surface-container-lowest p-5 rounded-lg shadow-editorial transition-all hover:-translate-y-1 flex flex-col md:flex-row items-center gap-6">
+              {/* Pet */}
+              <div className="flex items-center gap-4 flex-1">
+                <div className="w-14 h-14 rounded-lg overflow-hidden bg-surface-container flex-shrink-0">
+                  {s.imagemUrl
+                    ? <img src={s.imagemUrl} alt={s.nomePet} className="w-full h-full object-cover" />
+                    : <div className="w-full h-full flex items-center justify-center text-2xl">🐾</div>}
+                </div>
+                <div>
+                  <span className="font-body text-xs font-bold uppercase tracking-widest text-secondary block">{s.nomePet}</span>
+                  <p className="font-body text-sm text-on-surface-variant">
+                    {s.especie ? especieLabel[s.especie] : '—'}
+                  </p>
+                </div>
               </div>
 
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <p className="font-display text-lg font-medium text-carbon-800">
-                  {s.nomePet}
-                  {s.especie && (
-                    <span className="ml-2 font-body text-sm font-normal text-carbon-800/50">
-                      {especieLabel[s.especie]}
-                    </span>
-                  )}
-                </p>
-                <p className="font-body text-sm text-carbon-800/50">
-                  {s.nomeAdotante} · {formatDate(s.dataSolicitacao)}
+              {/* Adotante */}
+              <div className="flex-1">
+                <p className="font-body font-semibold text-on-surface">{s.nomeAdotante}</p>
+                <p className="font-body text-sm text-on-surface-variant flex items-center gap-1">
+                  <span className="material-symbols-outlined text-sm">calendar_today</span>
+                  {formatDate(s.dataSolicitacao)}
                 </p>
               </div>
 
-              {/* Status + Actions */}
-              <div className="flex items-center gap-2">
+              {/* Status + ações */}
+              <div className="flex items-center gap-3">
                 <Badge variant={statusVariant[s.status]}>{statusLabel[s.status]}</Badge>
                 {s.status === 'PENDENTE' && (
                   <>
-                    <Button
-                      size="sm"
+                    <Button size="sm" variant="secondary"
                       onClick={() => changeStatus(s.id, 'APROVADA')}
                       loading={updateMutation.isPending && pendingId === s.id}
-                      aria-label={`Aprovar solicitação de ${s.nomeAdotante} para ${s.nomePet}`}
-                    >
+                      aria-label={`Aprovar ${s.nomeAdotante}`}>
                       Aprovar
                     </Button>
-                    <Button
-                      size="sm"
-                      variant="ghost"
+                    <button
                       onClick={() => changeStatus(s.id, 'RECUSADA')}
-                      loading={updateMutation.isPending && pendingId === s.id}
-                      aria-label={`Recusar solicitação de ${s.nomeAdotante} para ${s.nomePet}`}
-                    >
-                      Recusar
-                    </Button>
+                      disabled={updateMutation.isPending && pendingId === s.id}
+                      className="w-9 h-9 flex items-center justify-center text-error hover:bg-error-container/30 rounded-full transition-all"
+                      aria-label={`Recusar ${s.nomeAdotante}`}>
+                      <span className="material-symbols-outlined text-base">close</span>
+                    </button>
                   </>
                 )}
               </div>

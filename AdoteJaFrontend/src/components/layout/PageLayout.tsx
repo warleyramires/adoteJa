@@ -2,7 +2,6 @@ import { Header } from './Header'
 
 interface PageLayoutProps {
   children: React.ReactNode
-  /** Remove padding lateral (útil para full-width sections) */
   fluid?: boolean
 }
 
@@ -10,16 +9,25 @@ export function PageLayout({ children, fluid = false }: PageLayoutProps) {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className={`flex-1 ${fluid ? '' : 'max-w-6xl mx-auto w-full px-6 py-10'}`}>
+      <main className={`flex-1 pt-20 ${fluid ? '' : 'max-w-7xl mx-auto w-full px-8 py-10'}`}>
         {children}
       </main>
-      <footer className="border-t border-pedra-200 py-8">
-        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <span className="font-display text-lg font-medium text-carbon-800">
-            adote<span className="text-ambar-500">já</span>
-          </span>
-          <p className="font-body text-sm text-pedra-400">
-            © {new Date().getFullYear()} AdoteJá — Adoção responsável
+      <footer className="w-full rounded-t-xl mt-20 bg-surface-container">
+        <div className="max-w-7xl mx-auto px-12 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div>
+            <span className="font-headline text-lg font-bold text-on-surface">
+              adote<span className="text-primary">já</span>
+            </span>
+            <p className="font-body text-sm text-on-surface-variant mt-1">
+              Adoção responsável de animais
+            </p>
+          </div>
+          <div className="flex gap-8 font-body text-sm text-on-surface-variant">
+            <a href="/sobre" className="hover:text-primary transition-colors">Sobre</a>
+            <a href="#" className="hover:text-primary transition-colors">Política de privacidade</a>
+          </div>
+          <p className="font-body text-sm text-on-surface-variant">
+            © {new Date().getFullYear()} AdoteJá. Todos os direitos reservados.
           </p>
         </div>
       </footer>

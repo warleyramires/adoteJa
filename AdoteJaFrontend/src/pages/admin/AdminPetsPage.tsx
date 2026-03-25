@@ -34,8 +34,8 @@ export function AdminPetsPage() {
     <PageLayout>
       <div className="flex items-center justify-between mb-10">
         <div>
-          <p className="section-label mb-2">Painel</p>
-          <h1 className="font-display text-5xl font-normal text-carbon-800">Pets</h1>
+          <span className="section-label mb-2 block">Painel</span>
+          <h1 className="font-headline text-5xl font-extrabold text-on-surface">Pets</h1>
         </div>
         <Button onClick={() => setShowCreate(true)}>+ Novo pet</Button>
       </div>
@@ -43,30 +43,29 @@ export function AdminPetsPage() {
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="card animate-pulse h-40" />
+            <div key={i} className="bg-surface-container-lowest rounded-lg shadow-editorial animate-pulse h-40" />
           ))}
         </div>
       ) : isError ? (
         <div className="text-center py-24">
-          <p className="font-display text-3xl font-normal text-carbon-800/30">Erro ao carregar pets.</p>
+          <p className="font-headline text-3xl font-bold text-on-surface/30">Erro ao carregar pets.</p>
         </div>
       ) : (data?.content ?? []).length === 0 ? (
         <div className="text-center py-24">
-          <p className="font-display text-3xl font-normal text-carbon-800/30">Nenhum pet cadastrado.</p>
+          <p className="font-headline text-3xl font-bold text-on-surface/30">Nenhum pet cadastrado.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {(data?.content ?? []).map((pet) => (
-            <div key={pet.id} className="card p-4 flex flex-col gap-3">
-              <div className="aspect-[16/9] bg-pedra-100 rounded-xl overflow-hidden">
+            <div key={pet.id} className="bg-surface-container-lowest rounded-lg shadow-editorial p-4 flex flex-col gap-3">
+              <div className="aspect-[16/9] bg-surface-container rounded overflow-hidden">
                 {pet.imagemUrl
                   ? <img src={pet.imagemUrl} alt={pet.nome} className="w-full h-full object-cover" />
-                  : <div className="w-full h-full flex items-center justify-center text-4xl">🐾</div>
-                }
+                  : <div className="w-full h-full flex items-center justify-center text-4xl">🐾</div>}
               </div>
               <div>
-                <p className="font-display text-lg font-medium text-carbon-800">{pet.nome}</p>
-                <p className="font-body text-sm text-carbon-800/50">
+                <p className="font-headline text-lg font-bold text-on-surface">{pet.nome}</p>
+                <p className="font-body text-sm text-on-surface-variant">
                   {pet.caracteristica?.especie ? especieLabel[pet.caracteristica.especie] : '—'}
                   {' · '}
                   {pet.disponivel ? 'Disponível' : 'Indisponível'}
@@ -79,7 +78,7 @@ export function AdminPetsPage() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-red-500 hover:bg-red-50"
+                  className="text-error hover:bg-error-container/30"
                   loading={deleteMutation.isPending && deletingId === pet.id}
                   onClick={() => handleDelete(pet.id, pet.nome)}
                 >
