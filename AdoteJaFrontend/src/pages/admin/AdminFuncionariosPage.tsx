@@ -65,8 +65,8 @@ export function AdminFuncionariosPage() {
     <PageLayout>
       <div className="flex items-center justify-between mb-10">
         <div>
-          <p className="section-label mb-2">Painel</p>
-          <h1 className="font-display text-5xl font-normal text-carbon-800">Funcionários</h1>
+          <span className="section-label mb-2 block">Painel</span>
+          <h1 className="font-headline text-5xl font-extrabold text-on-surface">Funcionários</h1>
         </div>
         <Button onClick={showForm ? handleCancel : () => setShowForm(true)}>
           {showForm ? 'Cancelar' : '+ Novo funcionário'}
@@ -75,7 +75,7 @@ export function AdminFuncionariosPage() {
 
       {showForm && (
         <form onSubmit={handleSubmit} className="card p-6 mb-8 max-w-lg flex flex-col gap-4">
-          <h2 className="font-display text-2xl font-normal text-carbon-800">Novo funcionário</h2>
+          <h2 className="font-headline text-2xl font-bold text-on-surface">Novo funcionário</h2>
 
           <Input label="Nome" value={form.nome} onChange={set('nome')} required />
           <Input label="E-mail" type="email" value={form.email} onChange={set('email')} required />
@@ -92,14 +92,14 @@ export function AdminFuncionariosPage() {
           </div>
 
           <label className="flex flex-col gap-1">
-            <span className="font-body text-sm text-carbon-800/70">Perfil de acesso</span>
+            <span className="font-body text-sm text-on-surface-variant">Perfil de acesso</span>
             <select value={form.role} onChange={set('role')} className="input-base">
               <option value="ROLE_MEMBER">Funcionário</option>
               <option value="ROLE_ADMINISTRATOR">Administrador</option>
             </select>
           </label>
 
-          <p className="font-body text-sm font-medium text-carbon-800/70 -mb-1">Endereço</p>
+          <p className="font-body text-sm font-medium text-on-surface-variant -mb-1">Endereço</p>
 
           <Input label="Logradouro" value={form.logradouro} onChange={set('logradouro')} required />
 
@@ -124,24 +124,24 @@ export function AdminFuncionariosPage() {
         </div>
       ) : isError ? (
         <div className="text-center py-24">
-          <p className="font-display text-3xl font-normal text-carbon-800/30">Erro ao carregar funcionários.</p>
+          <p className="font-headline text-3xl font-bold text-on-surface/30">Erro ao carregar funcionários.</p>
         </div>
       ) : (funcionarios ?? []).length === 0 ? (
         <div className="text-center py-24">
-          <p className="font-display text-3xl font-normal text-carbon-800/30">Nenhum funcionário cadastrado.</p>
+          <p className="font-headline text-3xl font-bold text-on-surface/30">Nenhum funcionário cadastrado.</p>
         </div>
       ) : (
         <div className="space-y-3">
           {(funcionarios ?? []).map((f) => (
             <div key={f.id} className="card p-4 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-ambar-100 flex items-center justify-center">
-                <span className="font-display text-lg font-medium text-ambar-500">
+              <div className="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center">
+                <span className="font-headline text-lg font-bold text-on-primary-fixed">
                   {f.nome.charAt(0).toUpperCase() || '?'}
                 </span>
               </div>
               <div>
-                <p className="font-body text-base font-medium text-carbon-800">{f.nome}</p>
-                <p className="font-body text-sm text-carbon-800/50">{f.email}{f.cargo ? ` · ${f.cargo}` : ''}</p>
+                <p className="font-body text-base font-medium text-on-surface">{f.nome}</p>
+                <p className="font-body text-sm text-on-surface-variant">{f.email}{f.cargo ? ` · ${f.cargo}` : ''}</p>
               </div>
             </div>
           ))}

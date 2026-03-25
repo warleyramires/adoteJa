@@ -9,17 +9,17 @@ interface BadgeProps {
 }
 
 const variantClasses: Record<BadgeVariant, string> = {
-  ambar:   'bg-ambar-100 text-ambar-700',
-  azul:    'bg-azul-100 text-azul-600',
-  pedra:   'bg-pedra-200 text-carbon-800',
-  neutral: 'bg-creme-300 text-carbon-800',
+  ambar:   'bg-primary-fixed text-on-primary-fixed-variant',
+  azul:    'bg-secondary-fixed text-on-secondary-fixed',
+  pedra:   'bg-surface-container text-on-surface-variant',
+  neutral: 'bg-surface-container-high text-on-surface-variant',
 }
 
 export function Badge({ children, variant = 'neutral', className }: BadgeProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center font-body text-xs font-medium px-2.5 py-1 rounded-full',
+        'inline-flex items-center font-body text-xs font-semibold px-3 py-1 rounded-full',
         variantClasses[variant],
         className
       )}

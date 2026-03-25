@@ -42,7 +42,7 @@ export function MinhaContaPage() {
       <PageLayout>
         <div className="animate-pulse space-y-4 max-w-md">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-12 bg-pedra-200 rounded-2xl" />
+            <div key={i} className="h-14 bg-surface-container rounded" />
           ))}
         </div>
       </PageLayout>
@@ -53,7 +53,7 @@ export function MinhaContaPage() {
     return (
       <PageLayout>
         <div className="text-center py-24">
-          <p className="font-display text-3xl font-normal text-carbon-800/30">
+          <p className="font-headline text-3xl font-bold text-on-surface/30">
             Não foi possível carregar seus dados
           </p>
         </div>
@@ -64,12 +64,12 @@ export function MinhaContaPage() {
   return (
     <PageLayout>
       <div className="mb-10">
-        <p className="section-label mb-2">Configurações</p>
-        <h1 className="font-display text-5xl font-normal text-carbon-800">Minha conta</h1>
+        <span className="section-label mb-2 block">Configurações</span>
+        <h1 className="font-headline text-5xl font-extrabold text-on-surface">Minha conta</h1>
       </div>
 
       <div className="max-w-md">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <Input label="Nome completo" value={nome} onChange={(e) => setNome(e.target.value)} required />
           <Input label="E-mail" value={user?.email ?? ''} disabled />
           <Input label="Telefone principal" value={telefone1} onChange={(e) => setTelefone1(e.target.value)} />

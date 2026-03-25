@@ -71,14 +71,14 @@ export function PetFormModal({ pet, onClose }: PetFormModalProps) {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-3xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-8"
+        className="bg-surface-container-lowest rounded-lg shadow-editorial-lg w-full max-w-lg max-h-[90vh] overflow-y-auto p-8"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-6">
-          <h2 id="pet-modal-title" className="font-display text-3xl font-normal text-carbon-800">
+          <h2 id="pet-modal-title" className="font-headline text-3xl font-bold text-on-surface">
             {isEditing ? 'Editar pet' : 'Novo pet'}
           </h2>
-          <button aria-label="Fechar" onClick={onClose} className="font-body text-carbon-800/40 hover:text-carbon-800">&#x2715;</button>
+          <button aria-label="Fechar" onClick={onClose} className="font-body text-on-surface/40 hover:text-on-surface">&#x2715;</button>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -87,7 +87,7 @@ export function PetFormModal({ pet, onClose }: PetFormModalProps) {
 
           <div className="grid grid-cols-3 gap-3">
             <label className="flex flex-col gap-1">
-              <span className="font-body text-sm text-carbon-800/70">Espécie</span>
+              <span className="font-body text-sm text-on-surface-variant">Espécie</span>
               <select value={especie} onChange={(e) => setEspecie(e.target.value as Especie)}
                 className="input-base">
                 <option value="CAO">Cão</option>
@@ -96,7 +96,7 @@ export function PetFormModal({ pet, onClose }: PetFormModalProps) {
               </select>
             </label>
             <label className="flex flex-col gap-1">
-              <span className="font-body text-sm text-carbon-800/70">Porte</span>
+              <span className="font-body text-sm text-on-surface-variant">Porte</span>
               <select value={porte} onChange={(e) => setPorte(e.target.value as Porte)}
                 className="input-base">
                 <option value="PEQUENO">Pequeno</option>
@@ -105,7 +105,7 @@ export function PetFormModal({ pet, onClose }: PetFormModalProps) {
               </select>
             </label>
             <label className="flex flex-col gap-1">
-              <span className="font-body text-sm text-carbon-800/70">Sexo</span>
+              <span className="font-body text-sm text-on-surface-variant">Sexo</span>
               <select value={sexo} onChange={(e) => setSexo(e.target.value as Sexo)}
                 className="input-base">
                 <option value="MACHO">Macho</option>
@@ -117,31 +117,31 @@ export function PetFormModal({ pet, onClose }: PetFormModalProps) {
           <Input label="Raça (opcional)" value={raca} onChange={(e) => setRaca(e.target.value)} />
 
           <div className="flex gap-6">
-            <label className="flex items-center gap-2 font-body text-sm text-carbon-800 cursor-pointer">
+            <label className="flex items-center gap-2 font-body text-sm text-on-surface cursor-pointer">
               <input type="checkbox" checked={vacinado} onChange={(e) => setVacinado(e.target.checked)} />
               Vacinado
             </label>
-            <label className="flex items-center gap-2 font-body text-sm text-carbon-800 cursor-pointer">
+            <label className="flex items-center gap-2 font-body text-sm text-on-surface cursor-pointer">
               <input type="checkbox" checked={castrado} onChange={(e) => setCastrado(e.target.checked)} />
               Castrado
             </label>
-            <label className="flex items-center gap-2 font-body text-sm text-carbon-800 cursor-pointer">
+            <label className="flex items-center gap-2 font-body text-sm text-on-surface cursor-pointer">
               <input type="checkbox" checked={vermifugado} onChange={(e) => setVermifugado(e.target.checked)} />
               Vermifugado
             </label>
-            <label className="flex items-center gap-2 font-body text-sm text-carbon-800 cursor-pointer">
+            <label className="flex items-center gap-2 font-body text-sm text-on-surface cursor-pointer">
               <input type="checkbox" checked={disponivel} onChange={(e) => setDisponivel(e.target.checked)} />
               Disponível
             </label>
           </div>
 
           <label className="flex flex-col gap-1">
-            <span className="font-body text-sm text-carbon-800/70">Foto</span>
+            <span className="font-body text-sm text-on-surface-variant">Foto</span>
             <input
               type="file"
               accept="image/*"
               onChange={(e) => setImagem(e.target.files?.[0])}
-              className="font-body text-sm text-carbon-800"
+              className="font-body text-sm text-on-surface"
             />
           </label>
 

@@ -22,10 +22,8 @@ export function PetDetailPage() {
     return (
       <PageLayout>
         <div className="text-center py-24">
-          <p className="font-display text-3xl font-normal text-carbon-800/30 mb-4">Pet não encontrado</p>
-          <Link to="/pets">
-            <Button variant="ghost">← Voltar para listagem</Button>
-          </Link>
+          <p className="font-headline text-3xl font-bold text-on-surface/30 mb-4">Pet não encontrado</p>
+          <Link to="/pets"><Button variant="ghost">← Voltar para listagem</Button></Link>
         </div>
       </PageLayout>
     )
@@ -44,9 +42,8 @@ export function PetDetailPage() {
     return (
       <PageLayout>
         <div className="animate-pulse space-y-6">
-          <div className="h-96 bg-pedra-200 rounded-3xl" />
-          <div className="h-8 bg-pedra-200 rounded w-1/3" />
-          <div className="h-4 bg-pedra-100 rounded w-2/3" />
+          <div className="h-[500px] bg-surface-container rounded-lg" />
+          <div className="h-8 bg-surface-container rounded w-1/3" />
         </div>
       </PageLayout>
     )
@@ -56,10 +53,8 @@ export function PetDetailPage() {
     return (
       <PageLayout>
         <div className="text-center py-24">
-          <p className="font-display text-3xl font-normal text-carbon-800/30 mb-4">Pet não encontrado</p>
-          <Link to="/pets">
-            <Button variant="ghost">← Voltar para listagem</Button>
-          </Link>
+          <p className="font-headline text-3xl font-bold text-on-surface/30 mb-4">Pet não encontrado</p>
+          <Link to="/pets"><Button variant="ghost">← Voltar para listagem</Button></Link>
         </div>
       </PageLayout>
     )
@@ -70,106 +65,113 @@ export function PetDetailPage() {
 
   return (
     <PageLayout>
-      {/* Breadcrumb */}
-      <Link
-        to="/pets"
-        className="inline-flex items-center gap-1 font-body text-sm text-carbon-800/50 hover:text-ambar-500 mb-8 transition-colors"
-      >
+      <Link to="/pets" className="inline-flex items-center gap-1 font-body text-sm text-on-surface-variant hover:text-primary mb-8 transition-colors">
         ← Voltar para listagem
       </Link>
 
-      <div className="grid lg:grid-cols-2 gap-12">
-        {/* Foto */}
-        <div className="aspect-[4/3] bg-pedra-100 rounded-3xl overflow-hidden">
-          {pet.imagemUrl ? (
-            <img src={pet.imagemUrl} alt={pet.nome} className="w-full h-full object-cover" />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-8xl">🐾</div>
-          )}
+      {/* Hero gallery + sidebar */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-20">
+        {/* Gallery */}
+        <div className="lg:col-span-7">
+          <div className="relative h-[480px] rounded-lg overflow-hidden shadow-editorial-lg bg-surface-container">
+            {pet.imagemUrl ? (
+              <img src={pet.imagemUrl} alt={pet.nome} className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-8xl">🐾</div>
+            )}
+            {pet.disponivel && (
+              <span className="absolute top-5 left-5 bg-white/90 backdrop-blur-md text-primary px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase">
+                Disponível para adoção
+              </span>
+            )}
+          </div>
         </div>
 
-        {/* Informações */}
-        <div className="flex flex-col gap-6">
+        {/* Info sidebar */}
+        <div className="lg:col-span-5 bg-surface-container-low p-8 rounded-lg sticky top-28 space-y-6">
           <div>
-            <div className="flex items-center gap-3 mb-2">
-              <h1 className="font-display text-5xl font-normal text-carbon-800">{pet.nome}</h1>
-              {pet.disponivel
-                ? <Badge variant="azul">Disponível</Badge>
-                : <Badge variant="neutral">Indisponível</Badge>
-              }
-            </div>
-
-            {/* Características */}
-            {c && (
-              <div className="flex flex-wrap gap-2 mt-3">
-                {c.especie && <Badge variant="pedra">{especieLabel[c.especie]}</Badge>}
-                {c.porte   && <Badge variant="pedra">{porteLabel[c.porte]}</Badge>}
-                {c.sexo    && <Badge variant="pedra">{sexoLabel[c.sexo]}</Badge>}
-                {c.raca    && <Badge variant="neutral">{c.raca}</Badge>}
-                {c.cor     && <Badge variant="neutral">{c.cor}</Badge>}
+            {pet.disponivel && (
+              <div className="flex items-center gap-2 mb-2">
+                <span className="material-symbols-outlined text-secondary text-base">verified</span>
+                <span className="font-body text-sm font-semibold text-secondary uppercase tracking-widest">Disponível para adoção</span>
               </div>
+            )}
+            <h1 className="font-headline text-5xl font-extrabold text-on-surface tracking-tight mb-2">{pet.nome}</h1>
+            {c && (
+              <p className="font-body text-xl text-on-surface-variant font-medium">
+                {c.especie && especieLabel[c.especie]}
+                {c.sexo && ` · ${sexoLabel[c.sexo]}`}
+                {c.raca && ` · ${c.raca}`}
+              </p>
             )}
           </div>
 
-          {/* Descrição */}
-          {pet.descricao && (
-            <p className="font-body text-base text-carbon-800/70 leading-relaxed">{pet.descricao}</p>
+          {c && (
+            <div className="flex flex-wrap gap-2">
+              {c.porte && <Badge variant="pedra">{porteLabel[c.porte]}</Badge>}
+              {c.cor && <Badge variant="neutral">{c.cor}</Badge>}
+            </div>
           )}
 
-          {/* Saúde */}
+          {pet.descricao && (
+            <p className="font-body text-base text-on-surface-variant leading-relaxed">{pet.descricao}</p>
+          )}
+
+          {/* Saúde quick stats */}
           {s && (
-            <div>
-              <p className="section-label mb-3">Saúde</p>
-              <div className="grid grid-cols-3 gap-3">
-                {[
-                  { label: 'Vacinado',    value: s.vacinado },
-                  { label: 'Castrado',    value: s.castrado },
-                  { label: 'Vermifugado', value: s.vermifugado },
-                ].map(({ label, value }) => (
-                  <div key={label} className="bg-creme-50 rounded-2xl p-3 text-center border border-pedra-200">
-                    <span className="block text-2xl mb-1">{value === true ? '✓' : value === false ? '✗' : '—'}</span>
-                    <span className={`font-body text-xs font-medium ${
-                      value === true ? 'text-azul-600' : value === false ? 'text-red-500' : 'text-carbon-800/40'
-                    }`}>{label}</span>
-                  </div>
-                ))}
-              </div>
-              {s.historicoSaude && (
-                <p className="font-body text-sm text-carbon-800/60 mt-3 bg-pedra-100 rounded-2xl px-4 py-3">
-                  {s.historicoSaude}
-                </p>
-              )}
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { label: 'Vacinado', value: s.vacinado },
+                { label: 'Castrado', value: s.castrado },
+                { label: 'Vermifugado', value: s.vermifugado },
+              ].map(({ label, value }) => (
+                <div key={label} className="bg-surface-container-lowest p-3 rounded text-center shadow-editorial">
+                  <span className="block text-lg mb-0.5">{value === true ? '✓' : value === false ? '✗' : '—'}</span>
+                  <span className={`font-body text-xs font-semibold ${
+                    value === true ? 'text-secondary' : value === false ? 'text-error' : 'text-on-surface-variant'
+                  }`}>{label}</span>
+                </div>
+              ))}
             </div>
           )}
 
           {/* CTA */}
           {pet.disponivel && (
-            <div className="mt-auto pt-4 border-t border-pedra-200">
+            <div className="pt-2 space-y-3">
               {isAuthenticated ? (
-                <Button
-                  className="w-full"
-                  size="lg"
+                <Button className="w-full justify-center" size="lg"
                   loading={solicitarMutation.isPending}
                   disabled={solicitarMutation.isSuccess}
-                  onClick={handleSolicitar}
-                >
-                  {solicitarMutation.isSuccess ? 'Solicitação enviada ✓' : 'Solicitar adoção'}
+                  onClick={handleSolicitar}>
+                  {solicitarMutation.isSuccess
+                    ? <><span className="material-symbols-outlined text-sm">check</span> Solicitação enviada</>
+                    : <><span className="material-symbols-outlined text-sm">favorite</span> Solicitar adoção</>}
                 </Button>
               ) : (
                 <div className="space-y-3">
-                  <p className="font-body text-sm text-carbon-800/50 text-center">
+                  <p className="font-body text-sm text-on-surface-variant text-center">
                     Você precisa estar logado para solicitar adoção
                   </p>
                   <div className="grid grid-cols-2 gap-3">
-                    <Link to="/login"><Button variant="secondary" className="w-full">Entrar</Button></Link>
-                    <Link to="/cadastro"><Button className="w-full">Criar conta</Button></Link>
+                    <Link to="/login"><Button variant="secondary" className="w-full justify-center">Entrar</Button></Link>
+                    <Link to="/cadastro"><Button className="w-full justify-center">Criar conta</Button></Link>
                   </div>
                 </div>
               )}
             </div>
           )}
         </div>
-      </div>
+      </section>
+
+      {/* Detalhe de saúde */}
+      {s?.historicoSaude && (
+        <section className="max-w-2xl">
+          <h2 className="font-headline text-2xl font-bold text-on-surface mb-4">Histórico de saúde</h2>
+          <p className="font-body text-base text-on-surface-variant leading-relaxed bg-primary-fixed/30 px-6 py-5 rounded-lg border border-primary-fixed">
+            {s.historicoSaude}
+          </p>
+        </section>
+      )}
     </PageLayout>
   )
 }
