@@ -1,6 +1,8 @@
 package com.adotejabackend.AdoteJaBackend.services;
 
 import com.adotejabackend.AdoteJaBackend.config.SecurityConfiguration;
+import com.adotejabackend.AdoteJaBackend.dtos.CreateAdotanteDTO;
+import com.adotejabackend.AdoteJaBackend.dtos.EnderecoDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.RecoveryAdotanteDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.UpdateAdotanteDTO;
 import com.adotejabackend.AdoteJaBackend.models.Adotante;
@@ -19,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -117,5 +120,18 @@ class AdotanteServiceTest {
 
         assertThatThrownBy(() -> adotanteService.update(1L, dto))
                 .isInstanceOf(AccessDeniedException.class);
+    }
+
+    @Test
+    void create_menorDe18_lancaIllegalArgumentException() {
+        LocalDate nascimento17anos = LocalDate.now().minusYears(17);
+        EnderecoDTO endereco = new EnderecoDTO("Rua A", "10", "Centro", "Cidade", "SP", "01000-000");
+        CreateAdotanteDTO dto = new CreateAdotanteDTO(
+                "Menor", "menor@email.com", "Senha123", "11999999999",
+                null, endereco, "12345678900", nascimento17anos);
+
+        assertThatThrownBy(() -> adotanteService.create(dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("mínimo 18 anos");
     }
 }

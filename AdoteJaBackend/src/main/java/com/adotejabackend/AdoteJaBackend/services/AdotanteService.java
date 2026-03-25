@@ -21,6 +21,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 @Service
@@ -42,6 +44,10 @@ public class AdotanteService {
     private AuditService auditService;
 
     public RecoveryAdotanteDTO create(CreateAdotanteDTO dto) {
+        if (Period.between(dto.dataNascimento(), LocalDate.now()).getYears() < 18) {
+            throw new IllegalArgumentException("Adotante deve ter no mínimo 18 anos.");
+        }
+
         if (usuarioRepository.findByEmail(dto.email()).isPresent()) {
             throw new RegistrationException("E-mail já cadastrado.");
         }

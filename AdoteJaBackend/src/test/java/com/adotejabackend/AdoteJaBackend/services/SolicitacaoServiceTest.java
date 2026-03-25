@@ -82,6 +82,7 @@ class SolicitacaoServiceTest {
     void create_petDisponivel_criaSolicitacaoComStatusPendente() {
         when(adotanteRepository.findByEmail("adotante@test.com")).thenReturn(Optional.of(adotante));
         when(petRepository.findById(10L)).thenReturn(Optional.of(pet));
+        when(solicitacaoRepository.existsByAdotanteIdAndPetId(1L, 10L)).thenReturn(false);
         when(solicitacaoRepository.save(any(Solicitacao.class))).thenReturn(solicitacao);
 
         solicitacaoService.create(new CreateSolicitacaoDTO(10L, null));
@@ -153,6 +154,17 @@ class SolicitacaoServiceTest {
         assertThatThrownBy(() -> solicitacaoService.updateStatus(999L,
                 new UpdateStatusSolicitacaoDTO(StatusSolicitacao.APROVADO, null)))
                 .isInstanceOf(EntityNotFoundException.class);
+    }
+
+    @Test
+    void create_solicitacaoDuplicada_lancaIllegalArgumentException() {
+        when(adotanteRepository.findByEmail("adotante@test.com")).thenReturn(Optional.of(adotante));
+        when(petRepository.findById(10L)).thenReturn(Optional.of(pet));
+        when(solicitacaoRepository.existsByAdotanteIdAndPetId(1L, 10L)).thenReturn(true);
+
+        assertThatThrownBy(() -> solicitacaoService.create(new CreateSolicitacaoDTO(10L, null)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("já enviou uma solicitação");
     }
 
     @Test

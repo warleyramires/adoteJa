@@ -46,6 +46,10 @@ public class SolicitacaoService {
             throw new RuntimeException("Pet não está disponível para adoção.");
         }
 
+        if (solicitacaoRepository.existsByAdotanteIdAndPetId(adotante.getId(), pet.getId())) {
+            throw new IllegalArgumentException("Você já enviou uma solicitação para este pet.");
+        }
+
         Solicitacao solicitacao = new Solicitacao();
         solicitacao.setAdotante(adotante);
         solicitacao.setPet(pet);
