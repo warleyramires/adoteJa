@@ -30,6 +30,8 @@ import org.mockito.ArgumentCaptor;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,6 +40,7 @@ class SolicitacaoServiceTest {
     @Mock private SolicitacaoRepository solicitacaoRepository;
     @Mock private AdotanteRepository adotanteRepository;
     @Mock private PetRepository petRepository;
+    @Mock private AuditService auditService;
 
     @InjectMocks
     private SolicitacaoService solicitacaoService;
@@ -79,6 +82,7 @@ class SolicitacaoServiceTest {
     void create_petDisponivel_criaSolicitacaoComStatusPendente() {
         when(adotanteRepository.findByEmail("adotante@test.com")).thenReturn(Optional.of(adotante));
         when(petRepository.findById(10L)).thenReturn(Optional.of(pet));
+        when(solicitacaoRepository.existsByAdotanteIdAndPetId(1L, 10L)).thenReturn(false);
         when(solicitacaoRepository.save(any(Solicitacao.class))).thenReturn(solicitacao);
 
         solicitacaoService.create(new CreateSolicitacaoDTO(10L, null));
@@ -150,5 +154,27 @@ class SolicitacaoServiceTest {
         assertThatThrownBy(() -> solicitacaoService.updateStatus(999L,
                 new UpdateStatusSolicitacaoDTO(StatusSolicitacao.APROVADO, null)))
                 .isInstanceOf(EntityNotFoundException.class);
+    }
+
+    @Test
+    void create_solicitacaoDuplicada_lancaIllegalArgumentException() {
+        when(adotanteRepository.findByEmail("adotante@test.com")).thenReturn(Optional.of(adotante));
+        when(petRepository.findById(10L)).thenReturn(Optional.of(pet));
+        when(solicitacaoRepository.existsByAdotanteIdAndPetId(1L, 10L)).thenReturn(true);
+
+        assertThatThrownBy(() -> solicitacaoService.create(new CreateSolicitacaoDTO(10L, null)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("já enviou uma solicitação");
+    }
+
+    @Test
+    void updateStatus_registraAuditLog() {
+        when(solicitacaoRepository.findById(100L)).thenReturn(Optional.of(solicitacao));
+        when(solicitacaoRepository.save(any(Solicitacao.class))).thenReturn(solicitacao);
+
+        solicitacaoService.updateStatus(100L, new UpdateStatusSolicitacaoDTO(StatusSolicitacao.APROVADO, null));
+
+        verify(auditService).log(eq("STATUS_CHANGE"), eq("adotante@test.com"),
+                contains("Solicitação #100"));
     }
 }

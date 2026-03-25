@@ -2,6 +2,7 @@ package com.adotejabackend.AdoteJaBackend.services;
 
 import com.adotejabackend.AdoteJaBackend.config.SecurityConfiguration;
 import com.adotejabackend.AdoteJaBackend.dtos.CreateAdotanteDTO;
+import com.adotejabackend.AdoteJaBackend.exceptions.RegistrationException;
 import com.adotejabackend.AdoteJaBackend.dtos.EnderecoDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.RecoveryAdotanteDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.UpdateAdotanteDTO;
@@ -20,6 +21,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 @Service
@@ -37,9 +40,16 @@ public class AdotanteService {
     @Autowired
     private SecurityConfiguration securityConfiguration;
 
+    @Autowired
+    private AuditService auditService;
+
     public RecoveryAdotanteDTO create(CreateAdotanteDTO dto) {
+        if (Period.between(dto.dataNascimento(), LocalDate.now()).getYears() < 18) {
+            throw new IllegalArgumentException("Adotante deve ter no mínimo 18 anos.");
+        }
+
         if (usuarioRepository.findByEmail(dto.email()).isPresent()) {
-            throw new RuntimeException("E-mail já cadastrado.");
+            throw new RegistrationException("E-mail já cadastrado.");
         }
 
         Endereco endereco = toEnderecoEntity(dto.enderecoDTO());
@@ -58,7 +68,9 @@ public class AdotanteService {
         endereco.setUsuario(adotante);
         adotante.setEndereco(endereco);
 
-        return toRecoveryDTO(adotanteRepository.save(adotante));
+        RecoveryAdotanteDTO result = toRecoveryDTO(adotanteRepository.save(adotante));
+        auditService.log("REGISTER", dto.email(), "Adotante cadastrado");
+        return result;
     }
 
     public RecoveryAdotanteDTO findById(Long id) {

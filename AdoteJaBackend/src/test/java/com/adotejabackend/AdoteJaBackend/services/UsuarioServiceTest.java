@@ -2,6 +2,7 @@ package com.adotejabackend.AdoteJaBackend.services;
 
 import com.adotejabackend.AdoteJaBackend.config.SecurityConfiguration;
 import com.adotejabackend.AdoteJaBackend.dtos.CreateUsuarioDTO;
+import com.adotejabackend.AdoteJaBackend.exceptions.RegistrationException;
 import com.adotejabackend.AdoteJaBackend.dtos.EnderecoDTO;
 import com.adotejabackend.AdoteJaBackend.dtos.MeResponseDTO;
 import com.adotejabackend.AdoteJaBackend.enums.RoleName;
@@ -35,6 +36,7 @@ class UsuarioServiceTest {
     @Mock private SecurityConfiguration securityConfiguration;
     @Mock private JwtTokenService jwtTokenService;
     @Mock private AuthenticationManager authenticationManager;
+    @Mock private AuditService auditService;
 
     @InjectMocks
     private UsuarioService usuarioService;
@@ -62,12 +64,12 @@ class UsuarioServiceTest {
     }
 
     @Test
-    void createUsuario_emailDuplicado_lancaRuntimeException() {
+    void createUsuario_emailDuplicado_lancaRegistrationException() {
         when(usuarioRepository.findByEmail("existente@test.com"))
                 .thenReturn(Optional.of(new Usuario()));
 
         assertThatThrownBy(() -> usuarioService.createUsuario(buildCreateDto("existente@test.com")))
-                .isInstanceOf(RuntimeException.class)
+                .isInstanceOf(RegistrationException.class)
                 .hasMessageContaining("E-mail já cadastrado");
     }
 

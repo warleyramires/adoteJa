@@ -1,5 +1,6 @@
 package com.adotejabackend.AdoteJaBackend.config;
 
+import com.adotejabackend.AdoteJaBackend.components.RateLimitFilter;
 import com.adotejabackend.AdoteJaBackend.components.UserAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +27,9 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
+
+    @Autowired
+    private RateLimitFilter rateLimitFilter;
 
     @Autowired
     private UserAuthenticationFilter userAuthenticationFilter;
@@ -59,6 +63,13 @@ public class SecurityConfiguration {
                                 "img-src 'self' data: https:; " +
                                 "script-src 'self'"
                         ))
+                        .httpStrictTransportSecurity(hsts -> hsts
+                                .includeSubDomains(true)
+                                .maxAgeInSeconds(31536000))
+                        .referrerPolicy(referrer -> referrer
+                                .policy(org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
+                        .permissionsPolicy(permissions -> permissions
+                                .policy("camera=(), microphone=(), geolocation=()"))
                 )
                 .authorizeHttpRequests(auth -> auth
                         // Rotas públicas
@@ -89,6 +100,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/users/me").authenticated()
                         .anyRequest().denyAll()
                 )
+                .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
